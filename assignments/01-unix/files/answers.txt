@@ -1,0 +1,88 @@
+[gwatts@login3 01-unix]$ mkdir files
+
+[gwatts@login3 01-unix]$ cd files
+
+[gwatts@login3 files]$ touch answers.txt
+
+[gwatts@login3 files]$ wget https://www.constitution.org/usdeclar.txt
+--2019-01-18 18:35:10--  https://www.constitution.org/usdeclar.txt
+Resolving www.constitution.org... 52.52.40.206, 52.52.207.176, 52.8.181.78, ...
+Connecting to www.constitution.org|52.52.40.206|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+Saving to: “usdeclar.txt”
+[<=>    ] 0   --.-K/s   [ <=>   ] 8,685       --.-K/s   in 0s 
+2019-01-18 18:35:10 (42.9 MB/s) - “usdeclar.txt” saved [8685]
+
+[gwatts@login3 files]$ wget https://www.usconstitution.net/const.txt
+--2019-01-18 18:35:52--  https://www.usconstitution.net/const.txt
+Resolving www.usconstitution.net... 52.52.2.146
+Connecting to www.usconstitution.net|52.52.2.146|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: unspecified [text/plain]
+Saving to: “const.txt”
+[<=> ] 0  --.-K/s [ <=>  ] 45,119      --.-K/s   in 0.04s  
+2019-01-18 18:35:53 (1.09 MB/s) - “const.txt” saved [45119]
+
+[gwatts@login3 files]$ wget https://www.gutenberg.org/files/25344/25344-0.txt -O scarlet.txt
+--2019-01-18 18:37:35--  https://www.gutenberg.org/files/25344/25344-0.txt
+Resolving www.gutenberg.org... 152.19.134.47, 2610:28:3090:3000:0:bad:cafe:47
+Connecting to www.gutenberg.org|152.19.134.47|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 525464 (513K) [text/plain]
+Saving to: “scarlet.txt”
+ 0% [      ] 0     --.-K/s  18% [=====================>] 95,608  432K/s  43% [===================================================>       ] 226,680   511K/s 83% [=====================================================================================================>                    ] 439,672      661K/s  100%[=========================================================================================================================>] 525,464      729K/s   in 0.7s 
+2019-01-18 18:37:36 (729 KB/s) - “scarlet.txt” saved [525464/525464]
+
+[gwatts@login3 files]$ ls -lah
+total 584K
+drwxr-xr-x 2 gwatts pcol 4.0K Jan 18 18:37 .
+drwxr-xr-x 3 gwatts pcol 4.0K Jan 18 18:33 ..
+-rw-r--r-- 1 gwatts pcol    0 Jan 18 18:33 answers.txt
+-rw-r--r-- 1 gwatts pcol  45K Jan 18 12:05 const.txt
+-rw-r--r-- 1 gwatts pcol 514K Jan 23  2015 scarlet.txt
+-rw-r--r-- 1 gwatts pcol 8.5K Jan 18 12:15 usdeclar.txt
+
+[gwatts@login2 files]$ wc -l *
+     0 answers.txt
+   872 const.txt
+  9120 scarlet.txt
+   176 usdeclar.txt
+ 10168 total
+
+[gwatts@login3 files]$ find -size +50k
+./scarlet.txt
+
+[gwatts@login3 files]$ file const.txt
+const.txt: ASCII English text
+
+[gwatts@login3 files]$ md5sum *.txt
+d41d8cd98f00b204e9800998ecf8427e  answers.txt
+f66a8165c621d48bac2216b2f31e8742  const.txt
+4958553be1483e4cbd615ce5fa73f6ab  scarlet.txt
+7f54939b30ae7b6d45d473a4c82a41b0  usdeclar.txt
+
+[gwatts@login2 files]$ du -h
+584K    .
+
+[gwatts@login2 files]$ grep -ir 'judge' | wc -l
+22
+
+[gwatts@login2 files]$ grep -irl 'human' 
+scarlet.txt
+usdeclar.txt
+
+[gwatts@login3 files]$ head -n 15 const.txt scarlet.txt usdeclar.txt 
+
+[gwatts@login2 files]$ grep -oi 'scarlet' scarlet.txt | wc -l 
+125
+
+[gwatts@login3 files]$ head -n 15 const.txt scarlet.txt usdeclar.txt > foo
+
+[gwatts@login3 files]$ wc -l foo
+50 foo
+
+[gwatts@login3 files]$ echo "number of lines counts \n, not lines on screen"
+number of lines counts \n, not lines on screen
+
+[gwatts@login3 files]$ rm foo

@@ -1,0 +1,21 @@
+874 mkdir files
+875 cd files
+876 touch answers.txt
+877 wget https://www.constitution.org/usdeclar.txt
+878 wget https://www.usconstitution.net/const.txt
+879 wget https://www.gutenberg.org/files/25344/25344-0.txt -O scarlet.txt
+880 ls -lah
+881 wc -l *
+882 find -size +50k
+883 file const.txt
+884 md5sum *.txt
+885 du -h
+886 grep -ir 'judge' | wc -l
+887 grep -irl 'human' 
+888 head -n 15 const.txt scarlet.txt usdeclar.txt 
+889 grep -oi 'scarlet' scarlet.txt | wc -l 
+890 head -n 15 const.txt scarlet.txt usdeclar.txt > foo
+891 wc -l foo
+892 echo "number of lines counts \n, not lines on screen"
+893 rm foo
+894 history > cmds
