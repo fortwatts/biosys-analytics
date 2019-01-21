@@ -320,13 +320,13 @@ Your `$PATH` setting is an ordered, colon-delimited list of directories that wil
 I've used "sed" to add a newline after each colon so you can more easily see that the directories are separated by colons. Notice that I have the shared "/rsgrps/bh_class/bin" directory first in my path. Much of our work will require access to tools that are not installed by default on the HPC. You could build them into your own `$HOME` directory, but it will be easier if you just add this shared directory to your $PATH. From the command line, you can do this:
 
 ```
-export PATH=/rsgrps/bhurwitz/hurwitzlab/bin:$PATH
+export PATH="/rsgrps/bh_class/conda/bin:/rsgrps/bh_class/bin:$PATH"
 ```
 
-You just told your shell (bash) to set the `$PATH` variable to our "/rsgrps/bh_class/bin" directory and then whatever it was set to before. When you log out, however, this will be lost. Since we want this to happen each time we log in, so we can add this command to `$HOME/.bashrc`:
+You just told your shell (bash) to set the `$PATH` variable to have put the "/rsgrps/bh_class/conda/bin" and  "/rsgrps/bh_class/bin" directories first and then whatever it was set to before. When you log out, however, this will be lost. Since we want this to happen each time we log in, so we can add this command to `$HOME/.bashrc`:
 
 ```
-echo "export PATH=/rsgrps/bhurwitz/hurwitzlab/bin:$PATH" >> ~/.bashrc
+echo "export PATH=/rsgrps/bh_class/conda/bin:/rsgrps/bh_class/bin:$PATH" >> ~/.bashrc
 ```
 
 As you find or create useful programs that you would like to have available globally on your system (i.e., not just in the current working directory), you can create a location like `$HOME/bin` (or my preferred `$HOME/.local/bin`) and add this to your `$PATH` as well. You can add as many directories as you like (within reason).
@@ -448,7 +448,7 @@ Quite often you'll be happy to find that the maintainers of the software you nee
 
 ## Source installations
 
-Installing from source usually means downloading a "tarball" ("tar" = "tape archive," a container of files, that is then compressed with a program like "gzip" to create a ".tar.gz" or ".tgz" file extension), running "configure" to figure out how it can build on your system, and then "make" to build the binaries. Usually you will run "make install" to put the binaries into their proper directory, but sometimes you just "make" and copy the files yourself.
+Installing from source usually means downloading a "tarball" ("tar" = "tape archive," a container of files, that is then compressed with a program like "gzip" to create a ".tar.gz" or ".tgz" file extension), running `./configure` to figure out how it can build on your system, and then `make` to build the binaries. Usually you will run `make install` to put the binaries into their proper directory, but sometimes you just `make` and copy the files yourself.
 
 The basic steps for installing into your `$HOME` are usually:
 
