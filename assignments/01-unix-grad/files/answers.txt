@@ -1,0 +1,33 @@
+[gwatts@login3 01-unix-grad]$ wc -w [cs]*
+  7652 const.txt
+ 86895 scarlet.txt
+ 94547 total
+
+[gwatts@login3 01-unix-grad]$ find -regex '^.*[cs]*'
+.
+./scarlet.txt
+./const.txt
+./answers.txt
+./usdeclar.txt
+./README.md
+
+[gwatts@login3 01-unix-grad]$ grep '^Article [0-9]' *
+const.txt:Article 1.
+const.txt:Article 2.
+const.txt:Article 3.
+const.txt:Article 4.
+const.txt:Article 5.
+const.txt:Article 6.
+const.txt:Article 7.
+
+[gwatts@login3 01-unix-grad]$ grep -cv "[a-zA-Z0-9]" const.txt 
+170
+
+[gwatts@login3 01-unix-grad]$ grep '^[AEIOUaeiou]' scarlet.txt | wc -c
+119706
+[gwatts@login3 01-unix-grad]$ grep '^[AEIOUaeiou]' scarlet.txt | wc -c [AEIOUaeiou]*
+ 485 answers.txt
+8685 usdeclar.txt
+9170 total
+# I give up!
+

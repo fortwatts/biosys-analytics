@@ -1,0 +1,6 @@
+1101 wc -w [cs]*
+1102 find -regex '^.*[cs]*'
+1103 grep '^Article [0-9]' *
+1104 grep -cv "[a-zA-Z0-9]" const.txt 
+1105 grep '^[AEIOUaeiou]' scarlet.txt | wc -c
+1106 grep '^[AEIOUaeiou]' scarlet.txt | wc -c [AEIOUaeiou]*
