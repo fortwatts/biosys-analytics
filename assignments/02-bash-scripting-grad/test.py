@@ -49,18 +49,14 @@ def test_hello():
 def test_gap():
     (retval1, out1) = getstatusoutput(gap)
     assert retval1 == 0
-    assert len(out1.split('\n')) == 143
+    assert len(out1.split('\n')) >= 142
 
-    (retval2, out2) = getstatusoutput('{} {}'.format(gap, 'a'))
+    (retval2, out2) = getstatusoutput('{} {}'.format(gap, 'b'))
     assert retval2 == 0
-    countries = out2.split('\n')
-    assert len(countries) == 7
-
-    assert re.search('1\tAfghanistan', countries[0])
-    assert re.search('7\tAustria', countries[-1])
+    assert len(out2.split('\n')) == 11
 
     (retval3, out3) = getstatusoutput('{} {}'.format(gap, 'q'))
-    assert retval3 > 0
+    assert retval3 == 0
     assert out3 == 'There are no countries starting with "q"'
 
     (retval4, out4) = getstatusoutput('{} "{}"'.format(gap, '[u-z]'))
