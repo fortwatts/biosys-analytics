@@ -3,13 +3,16 @@
 set -u
 
 if [[ $# -eq 0 ]]; then
-    REGEX='[A-Z]'
+    REGEX='A-Z'
 #    echo "REGEX is set to: $REGEX because args = 0"
 elif [[ $1 =~ ^['['] ]]
 then
     REGEX=$1
+    REGEX=${REGEX//[}
+    REGEX=${REGEX//]}
+#    echo "REGEX has had brackets removed: $REGEX"
 else
-    REGEX="[$1]"
+    REGEX="$1"
 fi
 
 UPPERCASEREGEX=${REGEX^^}
@@ -17,7 +20,7 @@ UPPERCASEREGEX=${REGEX^^}
 
 i=0
 for FILENAME in $(ls -f1 ../../data/gapminder | sort); do
-    if [[ $FILENAME =~ ^$UPPERCASEREGEX ]]; then
+    if [[ $FILENAME =~ ^[$UPPERCASEREGEX] ]]; then
         BASENAME=$(basename $FILENAME '.cc.txt')
 	i=$((i+1))
         echo "$BASENAME"

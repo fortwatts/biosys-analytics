@@ -18,7 +18,7 @@ i=0
 while read -r LINE; do
     #if [[ i -lt 10 ]]; then
         i=$((i+1))
-        printf "%3d: %s\n" $i "$LINE"
+        printf "%s %s\n" $i "$LINE"
     #fi
 done < "$FILE"
 
