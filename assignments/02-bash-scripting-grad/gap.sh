@@ -29,4 +29,5 @@ done
 
 if [[ $i -eq 0 ]]; then
     echo "There are no countries starting with \"$REGEX\""
+    exit 1
 fi
