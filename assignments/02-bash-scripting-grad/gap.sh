@@ -23,7 +23,7 @@ for FILENAME in $(ls -f1 ../../data/gapminder | sort); do
     if [[ $FILENAME =~ ^[$UPPERCASEREGEX] ]]; then
         BASENAME=$(basename $FILENAME '.cc.txt')
 	i=$((i+1))
-        echo "$BASENAME"
+        echo "$i $BASENAME"
     fi
 done
 
