@@ -23,17 +23,19 @@ def main():
         print("NUM (",size,") must be between 1 and 9",sep="")
         sys.exit(1)
 
-    grid = list(range(1,((size ** 2)+1)))
+    grid = [str(i) for i in list(range(1,((size ** 2)+1)))]
+
     i = 0
     while i < int(grid[-1]):
+        print("{0:>5}".format(' '.join(grid[i:(i+size)])))
+        i = i+size
+
+# --------------------------------------------------
+main()
+
+        #print("{}".format(' '.join(grid[i:(i+size)])))
         # this works        print(*(grid[i:(i+(int(size[0])))]))
-        print(*(grid[i:(i+size)]))
         #print('{}'.format(*(grid[i:(i+(int(size[0])))])))
         #print(*(grid[i:(i+(int(size[0])))])).rjust(width)
         #print('{}'.format(grid[i:(i+int(size[0]))]))
         #print('*'.join(str(grid[i:(i+size)])))
-        i = i+size
-        #print("i is:",i,"and size0 is:", (int(size[0])))
-
-# --------------------------------------------------
-main()
