@@ -21,5 +21,6 @@ def main():
     elif len(names) > 2:
         print ('Hello to the {} of you: {}, and {}!'.format(len(names), ", ".join(names[:-1]), names[-1]))
 
+#    print ('Hello to the {} of you : {}, and {}!'.format(len(names), ", ".join(names{:-1}), names[-1]))
 # --------------------------------------------------
 main()
