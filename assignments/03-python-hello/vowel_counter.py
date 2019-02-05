@@ -18,8 +18,8 @@ def main():
         sys.exit(1)
 
     vowel_count = 0
-    for letter in phrase[0]:
-        if letter == 'a' or letter == 'A' or letter == 'e' or letter == 'E' or letter == 'i' or letter == 'I' or letter == 'o' or letter == 'O' or letter == 'u' or letter == 'U':
+    for letter in phrase[0].lower():
+        if letter in 'aeiou':
             vowel_count += 1
 
     if vowel_count == 0 or vowel_count >1:
