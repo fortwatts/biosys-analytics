@@ -2,7 +2,7 @@
 """
 Author : gwatts
 Date   : 2019-02-03
-Purpose: Rock the Casbah
+Purpose: count vowels in useer provided argument
 """
 
 import os
