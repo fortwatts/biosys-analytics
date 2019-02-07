@@ -19,7 +19,7 @@ def main():
 
     size = int(size[0])
 
-    if size < 2 or size > 8:
+    if size < 2 or size > 9:
         print("NUM (",size,") must be between 1 and 9",sep="")
         sys.exit(1)
 
