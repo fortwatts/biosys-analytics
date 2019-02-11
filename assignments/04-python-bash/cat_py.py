@@ -24,6 +24,7 @@ def main():
 
     lines = []
 
+
     for line in open(file):
         lines.append(line.rstrip('\n'))
 # use enumereate on the list:
