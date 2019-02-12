@@ -22,7 +22,6 @@ def main():
         print('{} is not a file'.format(file))
         sys.exit(1)
 
-    lines = []
     for i, line in enumerate(open(file)):
         print('{:3}: {}'.format((i+1),line), end='')
 # --------------------------------------------------
