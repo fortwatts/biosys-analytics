@@ -7,12 +7,13 @@ Purpose: tictactoe script using commandline gflagged arguments
 
 import argparse
 import sys
+import re
 
 
--s|--state: The state of the board (type str, default "........." [9 dots])
--p|--player: The player to modify the state (type str, valid "X" or "O", no default)
--c|--cell: The cell to alter (type int, valid 1-9, default None)
--h|--help: Indication to print "usage" and exit (no error)
+#-s|--state: The state of the board (type str, default "........." [9 dots])
+#-p|--player: The player to modify the state (type str, valid "X" or "O", no default)
+#-c|--cell: The cell to alter (type int, valid 1-9, default None)
+#-h|--help: Indication to print "usage" and exit (no error)
 
 # --------------------------------------------------
 def get_args():
@@ -48,8 +49,8 @@ def get_args():
         type=int,
         default=None)
 
-    parser.add_argument(
-        '-h', '--help', help='Indication to print "usage" and exit (no error)', action='store_true')
+#    parser.add_argument(
+#        '-h', '--help', help='Indication to print "usage" and exit (no error)', action='store_true')
 
     return parser.parse_args()
 
@@ -71,17 +72,28 @@ def die(msg='Something bad happened'):
 def main():
     """Make a jazz noise here"""
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    flag_arg = args.flag
-    pos_arg = args.positional
+    state = args.state
+    player = args.player
+    cell = args.cell
+    #help = args.help
 
-    print('str_arg = "{}"'.format(str_arg))
-    print('int_arg = "{}"'.format(int_arg))
-    print('flag_arg = "{}"'.format(flag_arg))
-    print('positional = "{}"'.format(pos_arg))
+#    print('state = "{}"'.format(state))
+#    print('player = "{}"'.format(player))
+#    print('cell = "{}"'.format(cell))
+#    print('help = "{}"'.format(help))
 
+    if not re.match(r'[.XO]', state) or 9 < len(state) > 9:
+        print('state must contain .,X,or O only and be 9 characters in length')
+        sys.exit(1)
+#    else:
+#        print('made it through state check')
 
+    if (not player) or (not cell):
+       print('Must provide both --player and --cell')
+
+    if not re.match(r'[XO]', player):
+       print('--player must be either "X" or "O"')
+       sys.exit(1)
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
