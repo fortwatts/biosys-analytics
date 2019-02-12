@@ -75,18 +75,15 @@ def main():
     state = args.state
     player = args.player
     cell = args.cell
-    #help = args.help
 
-#    print('state = "{}"'.format(state))
-#    print('player = "{}"'.format(player))
-#    print('cell = "{}"'.format(cell))
-#    print('help = "{}"'.format(help))
+    for e in state:
+         if not re.match(r'[.XO]', state):
+            print ('state "{}" must be 9 characters of only -, X, or O'.format(state))
+            sys.exit(1)
 
-    if not re.match(r'[.XO]', state) or 9 < len(state) > 9:
-        print('state must contain .,X,or O only and be 9 characters in length')
+    if len(state) != 9:
+        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
         sys.exit(1)
-#    else:
-#        print('made it through state check')
 
     if (not player) or (not cell):
        print('Must provide both --player and --cell')
@@ -94,6 +91,16 @@ def main():
     if not re.match(r'[XO]', player):
        print('--player must be either "X" or "O"')
        sys.exit(1)
+
+    for index, index_state in enumerate(state, start=1):
+#        print('index of index_state is: {}'.format(index))
+        if re.match(r'[XO]', index_state):
+            print('{}'.format(index_state),end='')
+        else:
+            print('{}'.format(index),end='')
+            #print('success!')
+    print('\n')
+
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
