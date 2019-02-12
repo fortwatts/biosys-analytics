@@ -3,6 +3,7 @@
 Author : gwatts@email.arizona.edu
 Date   : 2019-02-07
 Purpose: tictactoe script using commandline gflagged arguments
+Made with Visual studio
 """
 
 import argparse
@@ -10,10 +11,10 @@ import sys
 import re
 
 
-#-s|--state: The state of the board (type str, default "........." [9 dots])
-#-p|--player: The player to modify the state (type str, valid "X" or "O", no default)
-#-c|--cell: The cell to alter (type int, valid 1-9, default None)
-#-h|--help: Indication to print "usage" and exit (no error)
+# -s|--state: The state of the board (type str, default "........." [9 dots])
+# -p|--player: The player to modify the state (type str, valid "X" or "O", no default)
+# -c|--cell: The cell to alter (type int, valid 1-9, default None)
+# -h|--help: Indication to print "usage" and exit (no error)
 
 # --------------------------------------------------
 def get_args():
@@ -78,32 +79,32 @@ def main():
 
 #   check that we have a player and a cell argument
     if (not player) or (not cell):
-       print('Must provide both --player and --cell')
-       sys.exit(1)
+        print('Must provide both --player and --cell')
+        sys.exit(1)
 
 #   check that cell is between 1 and 9
     if (cell < 1) or (cell > 9):
-       print('cell must be integer between 1 and 9')
-       sys.exit(1)
+        print('cell must be integer between 1 and 9')
+        sys.exit(1)
 
 #   check that the state argument contains only ., X, O
-    if not re.match(r'^[XO.]{9}$', state) :
-        print ('state "{}" must be 9 characters of only -, X, or O'.format(state))
+    if not re.match(r'^[XO.]{9}$', state):
+        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
         sys.exit(1)
 
 #   check that the player argument is X or O
     if not re.match(r'[XO]', player):
-       print('--player must be either "X" or "O"')
-       sys.exit(1)
+        print('--player must be either "X" or "O"')
+        sys.exit(1)
 
 
 #    print the state with . replaced by position
     print('-------------')
     for index, index_state in enumerate(state, start=1):
         if re.match(r'[XO]', index_state):
-            print('| {} '.format(index_state),end='')
+            print('| {} '.format(index_state), end='')
         else:
-            print('| {} '.format(index),end='')
+            print('| {} '.format(index), end='')
         if (index) % 3 == 0:
             print('|\n-------------')
 
