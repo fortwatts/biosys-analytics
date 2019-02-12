@@ -79,17 +79,17 @@ def main():
 #   check that we have a player and a cell argument
     if (not player) or (not cell):
        print('Must provide both --player and --cell')
+       sys.exit(1)
 
-#   check that the state argument has 9 positions
-    if len(state) != 9:
-        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
-        sys.exit(1)
+#   check that cell is between 1 and 9
+    if (cell < 1) or (cell > 9):
+       print('cell must be integer between 1 and 9')
+       sys.exit(1)
 
 #   check that the state argument contains only ., X, O
-    for e in state:
-         if not re.match(r'[.XO]', state):
-            print ('state "{}" must be 9 characters of only -, X, or O'.format(state))
-            sys.exit(1)
+    if not re.match(r'^[XO.]{9}$', state) :
+        print ('state "{}" must be 9 characters of only -, X, or O'.format(state))
+        sys.exit(1)
 
 #   check that the player argument is X or O
     if not re.match(r'[XO]', player):
@@ -98,13 +98,14 @@ def main():
 
 
 #    print the state with . replaced by position
+    print('-------------')
     for index, index_state in enumerate(state, start=1):
         if re.match(r'[XO]', index_state):
-            print('{}'.format(index_state),end='')
+            print('| {} '.format(index_state),end='')
         else:
-            print('{}'.format(index),end='')
+            print('| {} '.format(index),end='')
         if (index) % 3 == 0:
-            print()
+            print('|\n-------------')
 
 # --------------------------------------------------
 if __name__ == '__main__':
