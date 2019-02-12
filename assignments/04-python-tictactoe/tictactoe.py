@@ -9,6 +9,11 @@ import argparse
 import sys
 
 
+-s|--state: The state of the board (type str, default "........." [9 dots])
+-p|--player: The player to modify the state (type str, valid "X" or "O", no default)
+-c|--cell: The cell to alter (type int, valid 1-9, default None)
+-h|--help: Indication to print "usage" and exit (no error)
+
 # --------------------------------------------------
 def get_args():
     """get command-line arguments"""
@@ -16,27 +21,35 @@ def get_args():
         description='Argparse Python script',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
+#    parser.add_argument(
+#        'positional', metavar='str', help='A positional argument')
+
     parser.add_argument(
-        'positional', metavar='str', help='A positional argument')
+        '-s',
+        '--state',
+        help='the state of the board (type str, default "........." [9 dots])',
+        metavar='str',
+        type=str,
+        default='.........')
 
     parser.add_argument(
         '-p',
-        '--arg',
-        help='type str, valid "X" or "O", no default',
+        '--player',
+        help='The player to modify the state (type str, valid "X" or "O", no default)',
         metavar='str',
         type=str,
         default='')
 
     parser.add_argument(
         '-c',
-        '--int',
-        help='type int, valid 1-9, default None',
+        '--cell',
+        help='the cell to alter (type int, valid 1-9, default None)',
         metavar='int',
         type=int,
-        default=0)
+        default=None)
 
     parser.add_argument(
-        '-f', '--flag', help='A boolean flag', action='store_true')
+        '-h', '--help', help='Indication to print "usage" and exit (no error)', action='store_true')
 
     return parser.parse_args()
 
