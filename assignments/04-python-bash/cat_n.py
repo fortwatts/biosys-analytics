@@ -23,12 +23,11 @@ def main():
         sys.exit(1)
 
     lines = []
-
+# read the lines of the file into a list:
     for line in open(file):
         lines.append(line.rstrip('\n'))
 # use enumereate on the list:
     for i, listelement in enumerate(lines):
-      #  print("{:3}".format(i), end='') 
         print('{:3}: {}'.format((i+1),listelement))
 # --------------------------------------------------
 main()
