@@ -15,7 +15,7 @@ def main():
 
     if len(args) < 1:
         print('Usage: {} FILE'.format(os.path.basename(sys.argv[0])))
-        sys.exit(1)
+        sys.exit(0)
 
     if len(args) < 2:
         num_lines = 3
@@ -25,7 +25,7 @@ def main():
     file = args[0]
     if not os.path.isfile(file):
         print('{} is not a file'.format(file))
-        sys.exit(1)
+        sys.exit(0)
 
     lines = []
     for line in open(file):
