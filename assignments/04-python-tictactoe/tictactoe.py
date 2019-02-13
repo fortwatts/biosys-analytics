@@ -88,20 +88,23 @@ def main():
     player = args.player
     cell = args.cell
 
+#   check that the player argument is X or O
+    if not re.match(r'[XO]', player) and (not cell) and (re.match('^[.]{9}$', state)):
+        print('--player must be either "X" or "O"')
+        sys.exit(1)
+
 #   check if we have no args
     if (not player) and (not cell) and (re.match('^[.]{9}$', state)):
         grid(player, cell, state)
         sys.exit(0)
 
-#   check that the state argument contains only -, X, O
-    if not re.match(r'^[XO-]{9}$', state):
-        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
+#   check that the state argument contains only ., X, O
+    if not re.match(r'^[XO.]{9}$', state):
+        print('state "{}" must be 9 characters of only ., X, or O'.format(state))
         sys.exit(1)
-
-#   check that the player argument is X or O
-    if not re.match(r'[XO]', player):
-        print('--player must be either "X" or "O"')
-        sys.exit(1)
+    else:
+        grid(player, cell, state)
+        sys.exit(0)
 
 #   check that cell is between 1 and 9
     if (cell < 1) or (cell > 9):
@@ -113,6 +116,7 @@ def main():
 #        print('Must provide both --player and --cell')
 #        sys.exit(1)
 
+    grid(player, cell, state)
 
 # --------------------------------------------------
 if __name__ == '__main__':
