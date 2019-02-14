@@ -64,51 +64,55 @@ def die(msg='Something bad happened'):
 
 
 # --------------------------------------------------
-def grid(player, cell, state):
+def grid(board):
+
     print('-------------')
-    for index, index_state in enumerate(state, start=1):
-        if re.match(r'[XO]', index_state):
-            print('| {} '.format(index_state), end='')
+    for key in board:
+        if re.match(r'[XO]', board[key]):
+            print('| {} '.format(board[key]), end='')
         else:
-            print('| {} '.format(index), end='')
-        if (index) % 3 == 0:
+            print('| {} '.format(key), end='')
+        if (key % 3) == 0:
             print('|\n-------------')
 
 def main():
-    """Make a jazz noise here"""
     args = get_args()
     state = args.state
     player = args.player
     cell = args.cell
 
-    if (not player) and (not cell) and (re.match('^[.]{9}$', state)):
-        #print('printing no arg grid')
-        grid(player, cell, state)
-        sys.exit(0)
-#    print('passed no args test')
+    board = {}
+    i = 1
+    for mark in state:
+        board[i] = mark
+        i += 1
+
+#    if (not player) and (cell is None) and (re.match('^[XO.]{9}$', state)):
+#        grid(board)
+#        sys.exit(0)
 
     if not re.match(r'^[XO.]{9}$', state):
         print('Invalid state "{}", must be 9 characters of only -, X, O'.format(state))
         sys.exit(1)
-#    print('passed no state test')
 
     if (player) and (not re.match('[XO]{1}$', player)):
         print('Invalid player "{}", must be X or O'.format(player))
         sys.exit(1)
-#    print('passed player test')
 
-    if (cell):
-        if (cell < 1 or cell > 9):
-            print('Invalid cell "{}", must be 1-9'.format(cell))
-            sys.exit(1)
-#    print('passed cell test')
+    if cell is not None and not 1 <= cell <= 9:
+        print('Invalid cell "{}", must be 1-9'.format(cell))
+        sys.exit(1)
+    elif cell is not None and (not re.match('[XO]{1}$', board[cell])):
+        board[cell] = player
+    elif cell is not None:
+        print('Cell {} already taken'.format(cell))
+        sys.exit(1)
 
-    if not all([player, cell]):
+    if any([player, cell]) and not all([player, cell]):
         print('Must provide both --player and --cell')
         sys.exit(1)
-#    print('passed both cell and player test')
-
-        grid(player, cell, state)
+    
+    grid(board)
 
 # --------------------------------------------------
 if __name__ == '__main__':
