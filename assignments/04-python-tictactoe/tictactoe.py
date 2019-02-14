@@ -87,10 +87,6 @@ def main():
         board[i] = mark
         i += 1
 
-#    if (not player) and (cell is None) and (re.match('^[XO.]{9}$', state)):
-#        grid(board)
-#        sys.exit(0)
-
     if not re.match(r'^[XO.]{9}$', state):
         print('Invalid state "{}", must be 9 characters of only -, X, O'.format(state))
         sys.exit(1)
