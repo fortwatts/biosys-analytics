@@ -39,5 +39,9 @@ def main():
     while i < num_lines:
         print('{}'.format(lines[i])) 
         i += 1
+
+# for i, line in enumerate(open(filename):
+#    print....
+#    i + 1 = num_lines
 # --------------------------------------------------
 main()

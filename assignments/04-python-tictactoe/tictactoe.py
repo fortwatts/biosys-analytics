@@ -10,17 +10,11 @@ import argparse
 import sys
 import re
 
-
-# -s|--state: The state of the board (type str, default "........." [9 dots])
-# -p|--player: The player to modify the state (type str, valid "X" or "O", no default)
-# -c|--cell: The cell to alter (type int, valid 1-9, default None)
-# -h|--help: Indication to print "usage" and exit (no error)
-
 # --------------------------------------------------
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Argparse Python script',
+        description='Tic-Tac-Toe board',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
 #    parser.add_argument(
@@ -70,44 +64,53 @@ def die(msg='Something bad happened'):
 
 
 # --------------------------------------------------
+def grid(board):
+
+    print('-------------')
+    for key in board:
+        if re.match(r'[XO]', board[key]):
+            print('| {} '.format(board[key]), end='')
+        else:
+            print('| {} '.format(key), end='')
+        if (key % 3) == 0:
+            print('|\n-------------')
+
 def main():
-    """Make a jazz noise here"""
     args = get_args()
     state = args.state
     player = args.player
     cell = args.cell
 
-#   check that we have a player and a cell argument
-    if (not player) or (not cell):
+    board = {}
+    i = 1
+    for mark in state:
+        board[i] = mark
+        i += 1
+
+    if not re.match(r'^[XO.]{9}$', state):
+        print('Invalid state "{}", must be 9 characters of only -, X, O'.format(state))
+        sys.exit(1)
+
+    if (player) and (not re.match('[XO]{1}$', player)):
+        print('Invalid player "{}", must be X or O'.format(player))
+        sys.exit(1)
+
+    if cell is not None and not 1 <= cell <= 9:
+        print('Invalid cell "{}", must be 1-9'.format(cell))
+        sys.exit(1)
+    elif cell is not None and (not re.match('[XO]{1}$', board[cell])):
+        board[cell] = player
+    elif cell is not None:
+        print('Cell {} already taken'.format(cell))
+        sys.exit(1)
+
+    if any([player, cell]) and not all([player, cell]):
         print('Must provide both --player and --cell')
         sys.exit(1)
-
-#   check that cell is between 1 and 9
-    if (cell < 1) or (cell > 9):
-        print('cell must be integer between 1 and 9')
-        sys.exit(1)
-
-#   check that the state argument contains only ., X, O
-    if not re.match(r'^[XO.]{9}$', state):
-        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
-        sys.exit(1)
-
-#   check that the player argument is X or O
-    if not re.match(r'[XO]', player):
-        print('--player must be either "X" or "O"')
-        sys.exit(1)
-
-
-#    print the state with . replaced by position
-    print('-------------')
-    for index, index_state in enumerate(state, start=1):
-        if re.match(r'[XO]', index_state):
-            print('| {} '.format(index_state), end='')
-        else:
-            print('| {} '.format(index), end='')
-        if (index) % 3 == 0:
-            print('|\n-------------')
+    
+    grid(board)
 
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
+
