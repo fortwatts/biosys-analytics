@@ -75,6 +75,7 @@ def main():
         codon_table[codon] = amino_acid
 
     out_fh = open(out_file, 'w')
+# with open(out_file) as out_fh:
     for i in range(0, len(sequence), 3):
         codon = sequence[i:i + 3]
         if codon in codon_table:
