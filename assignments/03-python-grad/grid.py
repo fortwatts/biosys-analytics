@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Author : gwatts
+Authori : gwatts
 Date   : 2019-02-03
 Purpose: Rock the Casbah
 """
