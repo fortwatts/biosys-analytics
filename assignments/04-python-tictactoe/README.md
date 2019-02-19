@@ -31,7 +31,7 @@ Tic-Tac-Toe board
 
 optional arguments:
   -h, --help            show this help message and exit
-  -s str, --state str   Board state (default: ---------)
+  -s str, --state str   Board state (default: .........)
   -p str, --player str  Player (default: )
   -c str, --cell str    Cell to apply -p (default: )
 ````
@@ -53,9 +53,9 @@ Die if given a bad `--state` (too short, not made entirely of "-XO"). Note the f
 
 ````
 $ ./tictactoe.py -s abcdefghi
-State "abcdefghi" must be 9 characters of only -, X, O
+State "abcdefghi" must be 9 characters of only ., X, O
 $ ./tictactoe.py --state XXO
-State "XXO" must be 9 characters of only -, X, O
+State "XXO" must be 9 characters of only ., X, O
 ````
 
 Die on invalid player:
