@@ -57,30 +57,35 @@ def main():
 
     args = get_args()
     codonfile = args.codons
-    outfilename = args.outfile
+    out_file = args.outfile
     sequence = args.positional.upper()
 
     if not os.path.isfile(codonfile):
-        print('--codons "{}" is not a file'.format(codonfile))
-        sys.exit(1)
+        die('--codons "{}" is not a file'.format(codonfile))
 
     codon_table = {}
     for line in open(codonfile):
+#a better way if youe bwliwvw input data is reliable
+#       codon, prot = line.upper().rstrip().split()
+#       codon_table[codon] = prot
+
         pairs = line.rstrip('\n').split()
         amino_acid = pairs[1]
         codon = pairs[0]
         codon_table[codon] = amino_acid
 
-    outfile = open(outfilename, 'w')
+    out_fh = open(out_file, 'w')
     for i in range(0, len(sequence), 3):
         codon = sequence[i:i + 3]
         if codon in codon_table:
+#better            outfile.write(amino_acid = codon_table.get(codon, -))
             amino_acid = codon_table[codon]
-            outfile.write(amino_acid)
+            out_fh.write(amino_acid)
+# else is not needed if using get on codon_table
         else:
-            outfile.write('-')
-    outfile.write('\n')
-    print('Output written to "{}"'.format(outfilename))
+            out_fh.write('-')
+    out_fh.write('\n')
+    print('Output written to "{}"'.format(out_file))
 
     
 # --------------------------------------------------
