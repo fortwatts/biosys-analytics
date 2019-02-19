@@ -65,7 +65,7 @@ def main():
 
     codon_table = {}
     for line in open(codonfile):
-#a better way if youe bwliwvw input data is reliable
+#a better way if you believe input data is reliable:
 #       codon, prot = line.upper().rstrip().split()
 #       codon_table[codon] = prot
 
@@ -78,11 +78,11 @@ def main():
 # with open(out_file) as out_fh:
     for i in range(0, len(sequence), 3):
         codon = sequence[i:i + 3]
+#better:   outfile.write(amino_acid = codon_table.get(codon, -))
+# else is not needed if using get on codon_table and 5 lines become 1
         if codon in codon_table:
-#better            outfile.write(amino_acid = codon_table.get(codon, -))
             amino_acid = codon_table[codon]
             out_fh.write(amino_acid)
-# else is not needed if using get on codon_table
         else:
             out_fh.write('-')
     out_fh.write('\n')
