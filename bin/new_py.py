@@ -61,8 +61,10 @@ def main():
 
 
     out_fh = open(out_file, 'w')
+
     # preamble = PREAMBLE.format(os.getlogin(), str(date.today()))
-    preamble = PREAMBLE
+    preamble = PREAMBLE.format(os.getenv('USER'), str(date.today()))                                                                                               
+    #preamble = PREAMBLE
     text = ARGPARSE if args.use_argparse else SIMPLE
 
     out_fh.write(preamble)
@@ -74,8 +76,8 @@ def main():
 # --------------------------------------------------
 PREAMBLE = """#!/usr/bin/env python3
 \"\"\"
-Author : gwatts
-Date   : enter here
+Author : {}
+Date   : {}
 Purpose: Rock the Casbah
 \"\"\"
 """
