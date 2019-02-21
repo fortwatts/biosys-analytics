@@ -78,7 +78,7 @@ def main():
 # with open(out_file) as out_fh:
     for i in range(0, len(sequence), 3):
         codon = sequence[i:i + 3]
-#better:   outfile.write(amino_acid = codon_table.get(codon, -))
+#better:   out_fh.write(amino_acid = codon_table.get(codon, -))
 # else is not needed if using get on codon_table and 5 lines become 1
         if codon in codon_table:
             amino_acid = codon_table[codon]
