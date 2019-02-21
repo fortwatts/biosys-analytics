@@ -2,8 +2,7 @@
 """
 Author : gwatts@email.arizona.edu
 Date   : 2019-02-07
-Purpose: tictactoe script using commandline flagged arguments
-Made with Visual studio
+Purpose: tictactoe script using commandline gflagged arguments
 """
 
 import argparse
@@ -70,35 +69,8 @@ def die(msg='Something bad happened'):
 
 
 # --------------------------------------------------
-def main():
-    """Make a jazz noise here"""
-    args = get_args()
-    state = args.state
-    player = args.player
-    cell = args.cell
+def grid(state):
 
-#   check that we have a player and a cell argument
-    if (not player) or (not cell):
-        print('Must provide both --player and --cell')
-        sys.exit(1)
-
-#   check that cell is between 1 and 9
-    if (cell < 1) or (cell > 9):
-        print('cell must be integer between 1 and 9')
-        sys.exit(1)
-
-#   check that the state argument contains only ., X, O
-    if not re.match(r'^[XO.]{9}$', state):
-        print('state "{}" must be 9 characters of only -, X, or O'.format(state))
-        sys.exit(1)
-
-#   check that the player argument is X or O
-    if not re.match(r'[XO]', player):
-        print('--player must be either "X" or "O"')
-        sys.exit(1)
-
-
-#    print the state with . replaced by position
     print('-------------')
     for index, index_state in enumerate(state, start=1):
         if re.match(r'[XO]', index_state):
@@ -108,6 +80,46 @@ def main():
         if (index) % 3 == 0:
             print('|\n-------------')
 
+def main():
+    args = get_args()
+    state = args.state
+    player = args.player
+    cell = args.cell
+
+#   check that the state argument contains only -, X, O
+    if not re.match(r'^[XO.]{9}$', state):# and player not None and cell not None:
+        print('Invalid state "{}", must be 9 characters of only ., X, O'.format(state))
+        sys.exit(1)
+
+#   check that the player argument is X or O
+    if player and not re.match(r'[XO]', player):
+        print('Invalid player "{}", must be X or O'.format(player))
+        sys.exit(1)
+
+#   check that cell is between 1 and 9
+    if cell == 0 or (cell is not None and (1 < cell > 9)):
+        print('Invalid cell "{}", must be 1-9'.format(cell))
+        sys.exit(1)
+
+#   check that we have a player and a cell argument
+    if any([player, cell]) and not all([player, cell]):
+        print('Must provide both --player and --cell')
+        sys.exit(1)
+
+    if all([player,cell]):
+#not re.match(r'^[.]{9}$', state) and a
+        cells = []
+        for i, char in enumerate(state, start=1):
+            cells.append(str(i) if char == '.' else char)
+        if cells[cell-1] not in 'XO':
+            cells[cell-1] = player
+        else:
+            die('Cell {} already taken'.format(cell))
+        state = cells
+
+    grid(state)
+
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
+
