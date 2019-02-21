@@ -117,7 +117,14 @@ def main():
             die('Cell {} already taken'.format(cell))
         state = cells
 
-    grid(state)
+    winning_states = [0,1,2]#, [4,5,6], [7,8,9], [1,4,7], [2,5,8], [3,6,9], [1,5,9], [3,5,7]]
+    print('winning_states is: {}'.format(winning_states))
+    print('state is: {}'.format(state))
+    print('player is: {}'.format(player))
+    if all([state[element] == player for element in winning_states]):
+        print('winner is: {}'.format(player))
+    
+#    grid(state)
 
 # --------------------------------------------------
 if __name__ == '__main__':
