@@ -22,9 +22,9 @@ def main():
 
     print('filename is "{}"'.format(filename))
     with open(filename) as myfile:
-        reader = csv.DictReader(myfile, delimiter='\n') # use , or \t for csv or tab-delimited
+        reader = csv.DictReader(myfile, delimiter=',') # use , or \t for csv or tab-delimited
         for row in reader:
-            print(row[re.match'[>*]')
+            print(row)
 
 # --------------------------------------------------
 main()
