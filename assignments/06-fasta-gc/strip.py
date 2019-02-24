@@ -64,9 +64,10 @@ def main():
 
     print('file_or_dir is {}'.format(file_or_dir))
 
-    file_list = os.listdir('file_or_dir')
+    for file in file_or_dir:
+        print('I have file: {}'.format(file))
 
-    print('file_list is: {}\nand outdir is: {}\nand percent is {}'.format(file_list,directory,percent))
+    print('file_or_dir is: {}\nand outdir is: {}\nand percent is {}'.format(file_or_dir,directory,percent))
 
 """     for file in files:
 
