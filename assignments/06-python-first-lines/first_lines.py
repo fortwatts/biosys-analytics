@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Author : gwatts
-Date   : enter here
-Purpose: Rock the Casbah
+Author : Ken Youens-Clark <kyclark@gmail.com>
+Date   : 2018-11-16
+Purpose: Get fields from a tab/csv file
 """
 
 import argparse
+import glob
+import os
+from Bio import SeqIO
 import sys
 
 
@@ -13,31 +16,12 @@ import sys
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Argparse Python script',
+        description='Segregate FASTA sequences by GC content',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        'positional', metavar='str', help='A positional argument')
-
-    parser.add_argument(
-        '-a',
-        '--arg',
-        help='A named string argument',
-        metavar='str',
-        type=str,
-        default='')
-
-    parser.add_argument(
-        '-i',
-        '--int',
-        help='A named integer argument',
-        metavar='int',
-        type=int,
-        default=0)
-
-    parser.add_argument(
-        '-f', '--flag', help='A boolean flag', action='store_true')
-
+        'dir', nargs='+', metavar='in_directory', help='Input directory')
+    
     return parser.parse_args()
 
 
@@ -58,17 +42,25 @@ def die(msg='Something bad happened'):
 def main():
     """Make a jazz noise here"""
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    flag_arg = args.flag
-    pos_arg = args.positional
+    in_dir = args.dir
 
-    print('str_arg = "{}"'.format(str_arg))
-    print('int_arg = "{}"'.format(int_arg))
-    print('flag_arg = "{}"'.format(flag_arg))
-    print('positional = "{}"'.format(pos_arg))
+    for directory in in_dir:
+        print('directory is:'.format(directory))
+        if not os.path.isdir(directory):
+            warn('"{}" is not a directory'.format(directory))
 
-
+    for file in os.listdir(in_dir):
+        print('file is:'.format(file))
+"""     path = os.path.join(dirname, file)
+        with open(file) as myfile_fh:
+            reader = csv.DictReader(myfile_fh, delimiter='\n') # use , or \t for csv or tab-delimited
+            i = 0
+            for row in reader:
+                if i == 0:
+                    print(row,base)
+                else:
+                    pass
+ """
 # --------------------------------------------------
 if __name__ == '__main__':
     main()

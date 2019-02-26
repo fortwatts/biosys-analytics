@@ -36,7 +36,7 @@ def get_args():
         help='Dividing line for percent GC',
         metavar='int',
         type=int,
-        default='50')
+        default=50)
 
     return parser.parse_args()
 
@@ -60,8 +60,8 @@ def main():
     args = get_args()
     in_dir = args.file
     out_dir = args.outdir
-    percent = (args.pct_gc)
-
+    percent = args.pct_gc
+    #print('percent is {} and type is: {}'.format(percent,type(percent)))
     if (1 > percent) or (percent > 100):
         die('--pct_gc "{}" must be between 0 and 100'.format(percent))
 
