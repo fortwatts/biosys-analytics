@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Author : George S. Watts
-Date   : 2019-02-24
-Purpose: Rock the Casbah
+Author : Ken Youens-Clark <kyclark@gmail.com>
+Date   : 2018-11-16
+Purpose: Get fields from a tab/csv file
 """
 
 import argparse
+import glob
+import os
+from Bio import SeqIO
 import sys
 
 
@@ -13,30 +16,27 @@ import sys
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Argparse Python script',
+        description='Segregate FASTA sequences by GC content',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        'positional', metavar='str', help='A positional argument')
+        'file', nargs='+', metavar='FASTA', help='Input FASTA file(s)')
 
     parser.add_argument(
-        '-a',
-        '--arg',
-        help='A named string argument',
-        metavar='str',
+        '-o',
+        '--outdir',
+        help='Output directory',
+        metavar='DIR',
         type=str,
-        default='')
+        default='out')
 
     parser.add_argument(
-        '-i',
-        '--int',
-        help='A named integer argument',
+        '-p',
+        '--pct_gc',
+        help='Dividing line for percent GC',
         metavar='int',
         type=int,
-        default=0)
-
-    parser.add_argument(
-        '-f', '--flag', help='A boolean flag', action='store_true')
+        default='50')
 
     return parser.parse_args()
 
@@ -58,15 +58,38 @@ def die(msg='Something bad happened'):
 def main():
     """Make a jazz noise here"""
     args = get_args()
-    str_arg = args.arg
-    int_arg = args.int
-    flag_arg = args.flag
-    pos_arg = args.positional
+    in_dir = args.file
+    out_dir = args.outdir
+    percent = (args.pct_gc)
 
-    print('str_arg = "{}"'.format(str_arg))
-    print('int_arg = "{}"'.format(int_arg))
-    print('flag_arg = "{}"'.format(flag_arg))
-    print('positional = "{}"'.format(pos_arg))
+    if (1 > percent) or (percent > 100):
+        die('--pct_gc "{}" must be between 0 and 100'.format(percent))
+
+    os.makedirs(out_dir, mode=511, exist_ok=True)
+    total_reads = 0 
+    for file in in_dir:
+        if not os.path.isfile(file):
+            warn('"{}" is not a file'.format(file))
+            continue
+
+        base, ext = os.path.splitext(os.path.basename(file))
+        out_high_fh   = open((os.path.join(out_dir, base + '_high' + ext)), 'w')
+        out_low_fh    = open((os.path.join(out_dir, base + '_low' + ext)), 'w')
+
+        with open(file, "rU") as file_fh:
+            for record in SeqIO.parse(file_fh, "fasta"):
+                total_reads += 1
+                i = 0
+                j = 0
+                for nucleotide in record.seq:
+                    i += 1
+                    if nucleotide in 'GC':
+                        j += 1
+                if (100*(j/i)) >= percent:
+                    SeqIO.write(record, out_high_fh, "fasta")
+                else:
+                    SeqIO.write(record, out_low_fh, "fasta")
+    print('Done, wrote {} sequences to out dir "{}"'.format(total_reads,out_dir))
 
 
 # --------------------------------------------------
