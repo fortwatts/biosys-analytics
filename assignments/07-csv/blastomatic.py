@@ -20,23 +20,23 @@ def get_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        'file', nargs='+', metavar='FASTA', help='Input FASTA file(s)')
+        'blasthits', metavar='FILE', help='BLAST output (-outfmt 6)')
 
     parser.add_argument(
         '-o',
-        '--outdir',
-        help='Output directory',
-        metavar='DIR',
+        '--outfile',
+        help='Output file',
+        metavar='FILE',
         type=str,
-        default='out')
+        default='')
 
     parser.add_argument(
-        '-p',
-        '--pct_gc',
-        help='Dividing line for percent GC',
-        metavar='int',
-        type=int,
-        default=50)
+        '-a',
+        '--annotations',
+        help='Annotation file',
+        metavar='FILE',
+        type=str,
+        default='')
 
     return parser.parse_args()
 
@@ -56,13 +56,14 @@ def die(msg='Something bad happened'):
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
     args = get_args()
-    in_dir = args.file
-    out_dir = args.outdir
-    percent = args.pct_gc
-    #print('percent is {} and type is: {}'.format(percent,type(percent)))
-    if (1 > percent) or (percent > 100):
+    blast_hits = args.blasthits
+    out_file = args.outfile
+    annotations = args.annotations
+
+    print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotations))
+
+"""     if (1 > percent) or (percent > 100):
         die('--pct_gc "{}" must be between 0 and 100'.format(percent))
 
     os.makedirs(out_dir, mode=511, exist_ok=True)
@@ -90,7 +91,7 @@ def main():
                 else:
                     SeqIO.write(record, out_low_fh, "fasta")
     print('Done, wrote {} sequences to out dir "{}"'.format(total_reads,out_dir))
-
+ """
 
 # --------------------------------------------------
 if __name__ == '__main__':
