@@ -8,7 +8,7 @@ Purpose: Get fields from a tab/csv file
 import argparse
 import glob
 import os
-from Bio import SeqIO
+#from collections import OrderedDict
 import sys
 
 
@@ -16,7 +16,7 @@ import sys
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Segregate FASTA sequences by GC content',
+        description='first lines',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
@@ -40,27 +40,22 @@ def die(msg='Something bad happened'):
 
 # --------------------------------------------------
 def main():
-    """Make a jazz noise here"""
     args = get_args()
     in_dir = args.dir
 
-    for directory in in_dir:
-        print('directory is:'.format(directory))
-        if not os.path.isdir(directory):
-            warn('"{}" is not a directory'.format(directory))
+    for mydirectory in in_dir:
+        print('{}'.format(mydirectory))
+        if not os.path.isdir(mydirectory):
+            warn('"{}" is not a directory'.format(mydirectory))
+            continue
+        dict_of_lines = {}
+        for file in os.listdir(mydirectory):
+            path = os.path.join(mydirectory, file)
+            with open(path) as myfile_fh:
+                dict_of_lines[myfile_fh.readline().rstrip()] = file
+        for line in sorted(dict_of_lines.keys()):
+            print('{:.<40} {}'.format(line, dict_of_lines[line]))    
 
-    for file in os.listdir(in_dir):
-        print('file is:'.format(file))
-"""     path = os.path.join(dirname, file)
-        with open(file) as myfile_fh:
-            reader = csv.DictReader(myfile_fh, delimiter='\n') # use , or \t for csv or tab-delimited
-            i = 0
-            for row in reader:
-                if i == 0:
-                    print(row,base)
-                else:
-                    pass
- """
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
