@@ -21,7 +21,16 @@ def get_args():
 
     parser.add_argument(
         'dir', nargs='+', metavar='in_directory', help='Input directory')
-    
+
+    parser.add_argument(
+        '-w',
+        '--width',
+        help='width of output line',
+        metavar='int',
+        type=int,
+        default=50)
+
+
     return parser.parse_args()
 
 
@@ -42,19 +51,21 @@ def die(msg='Something bad happened'):
 def main():
     args = get_args()
     in_dir = args.dir
+    out_width = args.width
 
     for mydirectory in in_dir:
-        print('{}'.format(mydirectory))
         if not os.path.isdir(mydirectory):
             warn('"{}" is not a directory'.format(mydirectory))
             continue
+        print('{}'.format(mydirectory))
         dict_of_lines = {}
         for file in os.listdir(mydirectory):
             path = os.path.join(mydirectory, file)
             with open(path) as myfile_fh:
                 dict_of_lines[myfile_fh.readline().rstrip()] = file
         for line in sorted(dict_of_lines.keys()):
-            print('{:.<40} {}'.format(line, dict_of_lines[line]))    
+            dots = '.'*(out_width - len(line) - len(dict_of_lines[line]))
+            print(line, dots, dict_of_lines[line])    
 
 # --------------------------------------------------
 if __name__ == '__main__':
