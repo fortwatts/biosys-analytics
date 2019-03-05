@@ -61,37 +61,47 @@ def main():
     out_file = args.outfile
     annotations = args.annotations
 
+
+    if not os.path.isfile(blast_hits):
+        die('"{}" is not a file'.format(blast_hits))
+
     print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotations))
 
-"""     if (1 > percent) or (percent > 100):
-        die('--pct_gc "{}" must be between 0 and 100'.format(percent))
+    print('I made a change here and its pretty go
+    
+    od')
+    # with open(blast_hits, "rU") as blast_hits_fh:
+    #     i = 0
+    #     blast_result = SearchIO.read(blast_hits_fh, 'blast-tab')
+    #     i =+ 1
+    #     if i < 10:
+    #         print(blast_result)
 
-    os.makedirs(out_dir, mode=511, exist_ok=True)
-    total_reads = 0 
-    for file in in_dir:
-        if not os.path.isfile(file):
-            warn('"{}" is not a file'.format(file))
-            continue
+    # os.makedirs(out_dir, mode=511, exist_ok=True)
+    # total_reads = 0 
+    # for file in in_dir:
+    #     if not os.path.isfile(file):
+    #         warn('"{}" is not a file'.format(file))
+    #         continue
 
-        base, ext = os.path.splitext(os.path.basename(file))
-        out_high_fh   = open((os.path.join(out_dir, base + '_high' + ext)), 'w')
-        out_low_fh    = open((os.path.join(out_dir, base + '_low' + ext)), 'w')
+    #     base, ext = os.path.splitext(os.path.basename(file))
+    #     out_high_fh   = open((os.path.join(out_dir, base + '_high' + ext)), 'w')
+    #     out_low_fh    = open((os.path.join(out_dir, base + '_low' + ext)), 'w')
 
-        with open(file, "rU") as file_fh:
-            for record in SeqIO.parse(file_fh, "fasta"):
-                total_reads += 1
-                i = 0
-                j = 0
-                for nucleotide in record.seq:
-                    i += 1
-                    if nucleotide in 'GC':
-                        j += 1
-                if (100*(j/i)) >= percent:
-                    SeqIO.write(record, out_high_fh, "fasta")
-                else:
-                    SeqIO.write(record, out_low_fh, "fasta")
-    print('Done, wrote {} sequences to out dir "{}"'.format(total_reads,out_dir))
- """
+    #     with open(file, "rU") as file_fh:
+    #         for record in SeqIO.parse(file_fh, "fasta"):
+    #             total_reads += 1
+    #             i = 0
+    #             j = 0
+    #             for nucleotide in record.seq:
+    #                 i += 1
+    #                 if nucleotide in 'GC':
+    #                     j += 1
+    #             if (100*(j/i)) >= percent:
+    #                 SeqIO.write(record, out_high_fh, "fasta")
+    #             else:
+    #                 SeqIO.write(record, out_low_fh, "fasta")
+    # print('Done, wrote {} sequences to out dir "{}"'.format(total_reads,out_dir))
 
 # --------------------------------------------------
 if __name__ == '__main__':
