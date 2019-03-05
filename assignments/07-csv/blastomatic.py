@@ -72,7 +72,10 @@ def main():
     with open(annotation_file, 'rU') as annotation_file_fh:
         annotations = csv.reader(annotation_file_fh, delimiter=',')
         for row in annotations:
-            genus_species[row[0]] = row[6] + ' ' + row[7]
+            if (row[6] + row[7]) == '':
+                genus_species[row[0]] = 'NA'
+            else:
+                genus_species[row[0]] = row[6] + '\t' + row[7]
 
     with open(blast_hits, 'rU') as blast_hits_fh:
         blast_result = csv.reader(blast_hits_fh, delimiter='\t')
@@ -90,7 +93,7 @@ def main():
                 print('Cannot find seq "' + read_id + '" in lookup', file=sys.stderr)
             elif out_file:
                 #print('printing: {} to out_file'.format(the_genus_species))
-                out_file_fh.write('{} {} {}\n'.format(read_id, pident, the_genus_species))
+                out_file_fh.write('{}\t{}\t{}\n'.format(read_id, pident, the_genus_species))
             else:
                 print('{} {} {}'.format(read_id, pident, the_genus_species))
 
