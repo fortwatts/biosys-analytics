@@ -5,8 +5,8 @@ Date   : 2018-11-16
 Purpose: Get fields from a tab/csv file
 """
 
+import csv
 import argparse
-import glob
 import os
 from Bio import SeqIO
 import sys
@@ -36,7 +36,7 @@ def get_args():
         help='Annotation file',
         metavar='FILE',
         type=str,
-        default='')
+        default='centroids.csv')
 
     return parser.parse_args()
 
@@ -59,23 +59,32 @@ def main():
     args = get_args()
     blast_hits = args.blasthits
     out_file = args.outfile
-    annotations = args.annotations
+    annotation_file = args.annotations
 
 
     if not os.path.isfile(blast_hits):
         die('"{}" is not a file'.format(blast_hits))
+    if not os.path.isfile(annotation_file):
+        die('"{}" is not a file'.format(annotation_file))
 
-    print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotations))
+    print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotation_file))
 
-    print('I made a change here and its pretty go
-    
-    od')
-    # with open(blast_hits, "rU") as blast_hits_fh:
-    #     i = 0
-    #     blast_result = SearchIO.read(blast_hits_fh, 'blast-tab')
-    #     i =+ 1
-    #     if i < 10:
-    #         print(blast_result)
+    genus_species = {}
+    with open(annotation_file, 'rU') as annotation_file_fh:
+        annotations = csv.reader(annotation_file_fh, delimiter=',')
+        for row in annotations:
+            genus_species[row[0]] = row[6]+row[7]
+
+    with open(blast_hits, 'rU') as blast_hits_fh:
+        blast_result = csv.reader(blast_hits_fh, delimiter='\t')
+        for row in blast_result:
+            print('read id: {} has genus species: {}'.format(row[1],genus_species.get([row[1]], 'No genus_species')))
+
+    print('I made a change here and its pretty good')
+
+# with open('data.csv','r') as f:
+#     next(f) # skip headings
+#     reader=csv.reader(f,delimiter='\t')
 
     # os.makedirs(out_dir, mode=511, exist_ok=True)
     # total_reads = 0 
