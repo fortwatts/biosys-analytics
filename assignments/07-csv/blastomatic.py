@@ -36,7 +36,7 @@ def get_args():
         help='Annotation file',
         metavar='FILE',
         type=str,
-        default='centroids.csv')
+        default='')
 
     return parser.parse_args()
 
@@ -66,51 +66,33 @@ def main():
         die('"{}" is not a file'.format(blast_hits))
     if not os.path.isfile(annotation_file):
         die('"{}" is not a file'.format(annotation_file))
-
-    print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotation_file))
+    #print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotation_file))
 
     genus_species = {}
     with open(annotation_file, 'rU') as annotation_file_fh:
         annotations = csv.reader(annotation_file_fh, delimiter=',')
         for row in annotations:
-            genus_species[row[0]] = row[6]+row[7]
+            genus_species[row[0]] = row[6] + ' ' + row[7]
 
     with open(blast_hits, 'rU') as blast_hits_fh:
         blast_result = csv.reader(blast_hits_fh, delimiter='\t')
+
+        if out_file == '':
+            print('seq_id\tpident\tgenus\tspecies')
+        else:
+            out_file_fh = open(out_file, 'w+')
+            out_file_fh.write('seq_id\tpident\tgenus\tspecies\n')
         for row in blast_result:
-            print('read id: {} has genus species: {}'.format(row[1],genus_species.get([row[1]], 'No genus_species')))
-
-    print('I made a change here and its pretty good')
-
-# with open('data.csv','r') as f:
-#     next(f) # skip headings
-#     reader=csv.reader(f,delimiter='\t')
-
-    # os.makedirs(out_dir, mode=511, exist_ok=True)
-    # total_reads = 0 
-    # for file in in_dir:
-    #     if not os.path.isfile(file):
-    #         warn('"{}" is not a file'.format(file))
-    #         continue
-
-    #     base, ext = os.path.splitext(os.path.basename(file))
-    #     out_high_fh   = open((os.path.join(out_dir, base + '_high' + ext)), 'w')
-    #     out_low_fh    = open((os.path.join(out_dir, base + '_low' + ext)), 'w')
-
-    #     with open(file, "rU") as file_fh:
-    #         for record in SeqIO.parse(file_fh, "fasta"):
-    #             total_reads += 1
-    #             i = 0
-    #             j = 0
-    #             for nucleotide in record.seq:
-    #                 i += 1
-    #                 if nucleotide in 'GC':
-    #                     j += 1
-    #             if (100*(j/i)) >= percent:
-    #                 SeqIO.write(record, out_high_fh, "fasta")
-    #             else:
-    #                 SeqIO.write(record, out_low_fh, "fasta")
-    # print('Done, wrote {} sequences to out dir "{}"'.format(total_reads,out_dir))
+            read_id = (row[1])
+            pident = (row[2])
+            the_genus_species = genus_species.get(read_id, 'id_not_found')
+            if the_genus_species == 'id_not_found':
+                print('Cannot find seq "' + read_id + '" in lookup', file=sys.stderr)
+            elif out_file:
+                #print('printing: {} to out_file'.format(the_genus_species))
+                out_file_fh.write('{} {} {}\n'.format(read_id, pident, the_genus_species))
+            else:
+                print('{} {} {}'.format(read_id, pident, the_genus_species))
 
 # --------------------------------------------------
 if __name__ == '__main__':
