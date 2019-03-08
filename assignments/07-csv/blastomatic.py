@@ -73,30 +73,24 @@ def main():
     with open(annotation_file, 'rU') as annotation_file_fh:
         annotations = csv.DictReader(annotation_file_fh)
         for row in annotations:
-            #if row['genus'] == '':
-                #print('rowgenus is empty')
-            #    genus[row['centroid']] = 'NA'
-            #else:
             genus[row['centroid']] = row['genus']
             species[row['centroid']] = row['species']
 
     with open(blast_hits, 'r') as blast_hits_fh:
         blast_result = csv.DictReader(blast_hits_fh, fieldnames=['qseqid', 'sseqid', 'pident', \
             'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore'], delimiter='\t')
-
+        # set up output headers
         if not out_file:
             print('seq_id\tpident\tgenus\tspecies')
         else:
             out_file_fh = open(out_file, 'w+')
             out_file_fh.write('seq_id\tpident\tgenus\tspecies\n')
-
         # make a dict called "output" with key = seqid and value = a list of the info we want 
         output = {}
         for row in blast_result:
             output[row['sseqid']] = [row['sseqid'], row['pident'], \
                 genus.get(row['sseqid'], 'NA'), species.get(row['sseqid'], 'NA')]
-
-        # iterate over the dict "output" and print to screen or file 
+        # iterate over the dict and print to screen or file 
         for key in output:
             if not genus.get(key):
                 print('Cannot find seq "' + key + '" in lookup', file=sys.stderr)
