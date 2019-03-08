@@ -76,7 +76,7 @@ def main():
         out_high_fh   = open((os.path.join(out_dir, base + '_high' + ext)), 'w')
         out_low_fh    = open((os.path.join(out_dir, base + '_low' + ext)), 'w')
 
-        with open(file, "rU") as file_fh:
+        with open(file, 'r') as file_fh:
             for record in SeqIO.parse(file_fh, "fasta"):
                 total_reads += 1
                 i = 0
