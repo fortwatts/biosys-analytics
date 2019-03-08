@@ -16,7 +16,7 @@ import sys
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Segregate FASTA sequences by GC content',
+        description='Annotate BLAST output',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
@@ -66,36 +66,46 @@ def main():
         die('"{}" is not a file'.format(blast_hits))
     if not os.path.isfile(annotation_file):
         die('"{}" is not a file'.format(annotation_file))
-    #print('blast_hits is: {} and out_file is: {} and annotations file is: {}'.format(blast_hits, out_file, annotation_file))
 
-    genus_species = {}
+    #create 2 dicts of key = sequence_id and value = genus or species
+    species = {}
+    genus = {}
     with open(annotation_file, 'rU') as annotation_file_fh:
-        annotations = csv.reader(annotation_file_fh, delimiter=',')
+        annotations = csv.DictReader(annotation_file_fh)
         for row in annotations:
-            if (row[6] + row[7]) == '':
-                genus_species[row[0]] = 'NA'
-            else:
-                genus_species[row[0]] = row[6] + '\t' + row[7]
+            #if row['genus'] == '':
+                #print('rowgenus is empty')
+            #    genus[row['centroid']] = 'NA'
+            #else:
+            genus[row['centroid']] = row['genus']
+            species[row['centroid']] = row['species']
 
-    with open(blast_hits, 'rU') as blast_hits_fh:
-        blast_result = csv.reader(blast_hits_fh, delimiter='\t')
+    with open(blast_hits, 'r') as blast_hits_fh:
+        blast_result = csv.DictReader(blast_hits_fh, fieldnames=['qseqid', 'sseqid', 'pident', \
+            'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore'], delimiter='\t')
 
-        if out_file == '':
+        if not out_file:
             print('seq_id\tpident\tgenus\tspecies')
         else:
             out_file_fh = open(out_file, 'w+')
             out_file_fh.write('seq_id\tpident\tgenus\tspecies\n')
+
+        # make a dict called "output" with key = seqid and value = a list of the info we want 
+        output = {}
         for row in blast_result:
-            read_id = (row[1])
-            pident = (row[2])
-            the_genus_species = genus_species.get(read_id, 'id_not_found')
-            if the_genus_species == 'id_not_found':
-                print('Cannot find seq "' + read_id + '" in lookup', file=sys.stderr)
-            elif out_file:
-                #print('printing: {} to out_file'.format(the_genus_species))
-                out_file_fh.write('{}\t{}\t{}\n'.format(read_id, pident, the_genus_species))
-            else:
-                print('{} {} {}'.format(read_id, pident, the_genus_species))
+            output[row['sseqid']] = [row['sseqid'], row['pident'], \
+                genus.get(row['sseqid'], 'NA'), species.get(row['sseqid'], 'NA')]
+
+        # iterate over the dict "output" and print to screen or file 
+        for key in output:
+            if not genus.get(key):
+                print('Cannot find seq "' + key + '" in lookup', file=sys.stderr)
+            elif not out_file:
+                print('\t'.join(output[key]))
+            elif out_file and genus.get(key) is not None:
+                out_file_fh.write('\t'.join(output[key]))
+                out_file_fh.write('\n')
+        
 
 # --------------------------------------------------
 if __name__ == '__main__':
