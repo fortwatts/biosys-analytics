@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Author : gwatts
+Author : George S. Watts <gwatts@email.arizona.edu>
 Date   : 2019-02-17
-Purpose: translate RNA or DNa sequence to protein
+Purpose: translate RNA or DNA sequence to protein
 """
 
 import argparse
@@ -23,7 +23,7 @@ def get_args():
     parser.add_argument(
         '-c',
         '--codons',
-        help='A file with codon translations)',
+        help='A file with codon translations',
         required=True,
         metavar='FILE',
         type=str,
@@ -32,7 +32,7 @@ def get_args():
     parser.add_argument(
         '-o',
         '--outfile',
-        help='A file with codon translations',
+        help='Output filename',
         metavar='FILE',
         type=str,
         default='out.txt')

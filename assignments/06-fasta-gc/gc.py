@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
-Author : George S. Watts
-Date   : 2019-02-37
+Author : George S. Watts <gwatts@email.arizona.edu>
+Date   : 2019-02-27
 Purpose: split fasta file by GC content
 """
 
 import argparse
-import glob
 import os
 from Bio import SeqIO
 import sys
@@ -61,7 +60,6 @@ def main():
     in_dir = args.file
     out_dir = args.outdir
     percent = args.pct_gc
-    #print('percent is {} and type is: {}'.format(percent,type(percent)))
     if (1 > percent) or (percent > 100):
         die('--pct_gc "{}" must be between 0 and 100'.format(percent))
 

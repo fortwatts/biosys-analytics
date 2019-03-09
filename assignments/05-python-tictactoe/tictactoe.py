@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
 """
-Author : gwatts@email.arizona.edu
+Author : George S. Watts <gwatts@email.arizona.edu>
 Date   : 2019-02-07
-Purpose: tictactoe script using commandline gflagged arguments
+Purpose: tictactoe script using commandline flagged arguments
 """
 
 import argparse
 import sys
 import re
-
-
-# -s|--state: The state of the board (type str, default "........." [9 dots])
-# -p|--player: The player to modify the state (type str, valid "X" or "O", no default)
-# -c|--cell: The cell to alter (type int, valid 1-9, default None)
-# -h|--help: Indication to print "usage" and exit (no error)
 
 # --------------------------------------------------
 def get_args():
@@ -21,9 +15,6 @@ def get_args():
     parser = argparse.ArgumentParser(
         description='Argparse Python script',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-#    parser.add_argument(
-#        'positional', metavar='str', help='A positional argument')
 
     parser.add_argument(
         '-s',
@@ -48,9 +39,6 @@ def get_args():
         metavar='int',
         type=int,
         default=None)
-
-#    parser.add_argument(
-#        '-h', '--help', help='Indication to print "usage" and exit (no error)', action='store_true')
 
     return parser.parse_args()
 
@@ -107,7 +95,6 @@ def main():
         sys.exit(1)
 
     if all([player,cell]):
-#not re.match(r'^[.]{9}$', state) and a
         cells = []
         for i, char in enumerate(state, start=1):
             cells.append(str(i) if char == '.' else char)

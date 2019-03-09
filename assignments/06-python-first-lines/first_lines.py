@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Author : Ken Youens-Clark <kyclark@gmail.com>
-Date   : 2018-11-16
-Purpose: Get fields from a tab/csv file
+Author : George S. Watts
+Date   : 2019-02-27
+Purpose: Get first line of every file in input directory with numbered output
 """
 
 import argparse
-import glob
 import os
-#from collections import OrderedDict
 import sys
 
 
@@ -29,7 +27,6 @@ def get_args():
         metavar='int',
         type=int,
         default=50)
-
 
     return parser.parse_args()
 
