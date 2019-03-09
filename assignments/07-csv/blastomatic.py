@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
-Author : Ken Youens-Clark <kyclark@gmail.com>
-Date   : 2018-11-16
-Purpose: Get fields from a tab/csv file
+Author : George S. Watts <fortwatts@gmail.com>
+Date   : 2019-03-08
+Purpose: annotate BLAST poutput with genus and species from annotation file 
 """
 
 import csv
 import argparse
 import os
-from Bio import SeqIO
 import sys
 
 
@@ -89,17 +88,16 @@ def main():
         output = {}
         for row in blast_result:
             output[row['sseqid']] = [row['sseqid'], row['pident'], \
-                genus.get(row['sseqid'], 'NA'), species.get(row['sseqid'], 'NA')]
+                (genus.get(row['sseqid']) or 'NA'), (species.get(row['sseqid']) or 'NA')]
         # iterate over the dict and print to screen or file 
         for key in output:
-            if not genus.get(key):
+            if genus.get(key) == None:
                 print('Cannot find seq "' + key + '" in lookup', file=sys.stderr)
             elif not out_file:
                 print('\t'.join(output[key]))
-            elif out_file and genus.get(key) is not None:
+            elif genus.get(key) or genus.get(key) == '':
                 out_file_fh.write('\t'.join(output[key]))
                 out_file_fh.write('\n')
-        
 
 # --------------------------------------------------
 if __name__ == '__main__':
