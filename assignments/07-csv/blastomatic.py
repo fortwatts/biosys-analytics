@@ -60,17 +60,20 @@ def main():
     out_file = args.outfile
     annotation_file = args.annotations
 
+    for file in [blast_hits, annotation_file]:
+        if not os.path.isfile(file):
+            die('"{}" is not a file'.format(blast_hits))
 
-    if not os.path.isfile(blast_hits):
-        die('"{}" is not a file'.format(blast_hits))
-    if not os.path.isfile(annotation_file):
-        die('"{}" is not a file'.format(annotation_file))
+    # if not os.path.isfile(blast_hits):
+    #     die('"{}" is not a file'.format(blast_hits))
+    # if not os.path.isfile(annotation_file):
+    #     die('"{}" is not a file'.format(annotation_file))
 
     #create 2 dicts of key = sequence_id and value = genus or species
     species = {}
     genus = {}
-    with open(annotation_file, 'rU') as annotation_file_fh:
-        annotations = csv.DictReader(annotation_file_fh)
+    with open(annotation_file, 'r') as annotation_file_fh:
+        annotations = csv.DictReader(annotation_file_fh, delimiter=',')
         for row in annotations:
             genus[row['centroid']] = row['genus']
             species[row['centroid']] = row['species']
@@ -79,6 +82,7 @@ def main():
         blast_result = csv.DictReader(blast_hits_fh, fieldnames=['qseqid', 'sseqid', 'pident', \
             'length', 'mismatch', 'gapopen', 'qstart', 'qend', 'sstart', 'send', 'evalue', 'bitscore'], delimiter='\t')
         # set up output headers
+#       out_fh = open(out_file, 'wt') if out_file else sys.stdout
         if not out_file:
             print('seq_id\tpident\tgenus\tspecies')
         else:
