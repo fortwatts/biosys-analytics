@@ -45,7 +45,7 @@ def test_bad_input():
 
 
 # --------------------------------------------------
-def test_good_input1():
+def test_good_input():
     """works on good input"""
 
     tests = [{
@@ -82,18 +82,21 @@ def test_good_input1():
         if os.path.isfile(out_file):
             os.remove(out_file)
 
-        rv, out = getstatusoutput(
-            run_tmpl.format(
-                prg=prg,
-                file='swiss.txt',
-                out_file=out_file,
-                skip=test['tax'],
-                keyword=test['kw']))
-        assert rv == 0
-        assert out.split('\n')[-1] == out_tmpl.format(
-            skipped=test['skipped'], took=test['took'], out=out_file)
+        try:
+            rv, out = getstatusoutput(
+                run_tmpl.format(
+                    prg=prg,
+                    file='swiss.txt',
+                    out_file=out_file,
+                    skip=test['tax'],
+                    keyword=test['kw']))
+            assert rv == 0
+            assert out.split('\n')[-1] == out_tmpl.format(
+                skipped=test['skipped'], took=test['took'], out=out_file)
 
-        fasta = list(SeqIO.parse(out_file, 'fasta'))
-        assert len(fasta) == test['took']
+            fasta = list(SeqIO.parse(out_file, 'fasta'))
+            assert len(fasta) == test['took']
 
-        os.remove(out_file)
+        finally:
+            if os.path.isfile(out_file):
+                os.remove(out_file)

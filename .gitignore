@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 __pycache__
 .pytest*
 *.swp
 *~
 *.epub
 .cache
+=======
+__pycache__
+.pytest*
+*.swp
+*~
+*.epub
+.cache
+.ipynb_checkpoints
+.DS_Store
+>>>>>>> 7d4eabf60a3cdf8d98daacdaa1005ad51a2dc94f
