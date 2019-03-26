@@ -62,7 +62,11 @@ def main():
 
     for file in [blast_hits, annotation_file]:
         if not os.path.isfile(file):
+<<<<<<< HEAD
             die('"{}" is not a file'.format(blast_hits))
+=======
+            die('"{}" is not a file'.format(file))
+>>>>>>> 31d63f0e3bea272fe40ee82f6f57f96b63cd4ee4
 
     # if not os.path.isfile(blast_hits):
     #     die('"{}" is not a file'.format(blast_hits))
