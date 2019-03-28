@@ -15,6 +15,12 @@ for player in ['X', 'A', 'O', '5']:
         print('{} bad'.format(player))
 ```
 
+    X OK
+    A bad
+    O OK
+    5 bad
+
+
 A shorter way to write this could be:
 
 
@@ -26,14 +32,25 @@ for player in ['X', 'A', 'B', '5']:
         print('{} bad'.format(player))
 ```
 
+    X OK
+    A bad
+    B bad
+    5 bad
+
+
 It's not too onerous, but it quickly gets worse as we get more complicated requirements. In that same exercise, we needed to check if `--state` was exactly 9 characters composed entirely of ".", "X", "O":
 
 
 ```python
 for state in ['XXX...OOO', 'XXX...OOA']:
+    #print([(x, x in 'XO.') for x in state])
     print(state, 'OK' if len(state) == 9 and 
           all(map(lambda x: x in 'XO.', state)) else 'No')
 ```
+
+    XXX...OOO OK
+    XXX...OOA No
+
 
 Can we make this simpler? Well, when we were starting out with the Unix command line, one exercise had us using `grep` to look for lines that start with vowels. One solution was:
 
@@ -66,9 +83,14 @@ Now let's describe our pattern using a character class `[XO]` and the length `{1
 
 
 ```python
-for player in ['X', 'A']:
+for player in ['X', 'O', 'A']:
     print(player, re.match('[XO]{1}', player))
 ```
+
+    X <_sre.SRE_Match object; span=(0, 1), match='X'>
+    O <_sre.SRE_Match object; span=(0, 1), match='O'>
+    A None
+
 
 We can extend this to our state problem:
 
@@ -76,16 +98,21 @@ We can extend this to our state problem:
 ```python
 state = 'XXX...OOO'
 print(state, re.match('[XO.]{9}', state))
+```
 
+    XXX...OOO <_sre.SRE_Match object; span=(0, 9), match='XXX...OOO'>
+
+
+
+```python
 state = 'XXX...OOA'
 print(state, re.match('[XO.]{9}', state))
 ```
 
-    XXX...OOO <_sre.SRE_Match object; span=(0, 9), match='XXX...OOO'>
     XXX...OOA None
 
 
-# Building regular expressions
+## Building regular expressions
 
 How do we match a number?
 
@@ -111,14 +138,10 @@ How do we match all the numbers from 0 to 9? We can create a character class tha
 
 
 ```python
-re.match('[0-9]', '1')
+print(re.match('[0-9]', '1'))
 ```
 
-
-
-
     <_sre.SRE_Match object; span=(0, 1), match='1'>
-
 
 
 There is a short-hand for the character class `[0-9]` that is `\d` (digit)
@@ -153,17 +176,143 @@ We can use `{}` to indicate `{min,max}`, `{min,}`, `{,max}`, or `{exactly}`:
 
 
 ```python
-print(re.match('\d{1,4}', '1234567890'))
-print(re.match('\d{1,}', '1234567890'))
-print(re.match('\d{,5}', '1234567890'))
-print(re.match('\d{8}', '1234567890'))
+print(re.match('\d{1,4}', '8005551212'))
 ```
 
-    <_sre.SRE_Match object; span=(0, 4), match='1234'>
-    <_sre.SRE_Match object; span=(0, 10), match='1234567890'>
-    <_sre.SRE_Match object; span=(0, 5), match='12345'>
-    <_sre.SRE_Match object; span=(0, 8), match='12345678'>
+    <_sre.SRE_Match object; span=(0, 4), match='8005'>
 
+
+
+```python
+print(re.match('\d{1,}', '8005551212'))
+```
+
+    <_sre.SRE_Match object; span=(0, 10), match='8005551212'>
+
+
+
+```python
+print(re.match('\d{,5}', '8005551212'))
+```
+
+    <_sre.SRE_Match object; span=(0, 5), match='80055'>
+
+
+
+```python
+print(re.match('\d{8}', '8005551212'))
+```
+
+    <_sre.SRE_Match object; span=(0, 8), match='80055512'>
+
+
+## match vs search
+
+Note that we are using `re.match` which requires the regex to match **at the beginning of the string**:
+
+
+```python
+print(re.match('\d{10}', 'That number to call is 8005551212!'))
+```
+
+    None
+
+
+If you want to match anywhere in the string, use `re.search`:
+
+
+```python
+for s in ['123', 'abc456', '789def']:
+    print(s, re.search('\d{3}', s))
+```
+
+    123 <_sre.SRE_Match object; span=(0, 3), match='123'>
+    abc456 <_sre.SRE_Match object; span=(3, 6), match='456'>
+    789def <_sre.SRE_Match object; span=(0, 3), match='789'>
+
+
+To anchor your match to the beginning of the string, use the `^`:
+
+
+```python
+for s in ['123', 'abc456', '789def']:
+    print(s, re.search('^\d{3}', s))
+```
+
+    123 <_sre.SRE_Match object; span=(0, 3), match='123'>
+    abc456 None
+    789def <_sre.SRE_Match object; span=(0, 3), match='789'>
+
+
+Use `$` for the end of the string:
+
+
+```python
+for s in ['123', 'abc456', '789def']:
+    print(s, re.search('\d{3}$', s))
+```
+
+    123 <_sre.SRE_Match object; span=(0, 3), match='123'>
+    abc456 <_sre.SRE_Match object; span=(3, 6), match='456'>
+    789def None
+
+
+And use both to say that the entire string from beginning to end must match:
+
+
+```python
+for s in ['123', 'abc456', '789def']:
+    print(s, re.search('^\d{3}$', s))
+```
+
+    123 <_sre.SRE_Match object; span=(0, 3), match='123'>
+    abc123 None
+    123def None
+
+
+Returning to our previous problem of trying to see if we got *exactly* one "X" or "O" for our tic-tac-toe player:
+
+
+```python
+for player in ['X', 'O', 'XX', 'OO']:
+    print(player, re.match('[XO]{1}', player))
+```
+
+    X <_sre.SRE_Match object; span=(0, 1), match='X'>
+    O <_sre.SRE_Match object; span=(0, 1), match='O'>
+    XX <_sre.SRE_Match object; span=(0, 1), match='X'>
+    OO <_sre.SRE_Match object; span=(0, 1), match='O'>
+
+
+The problem is that there is a match of `[XO]{1}` in the strings "XX" and "OO" -- there *is* exactly one X or O at the beginning of those strings. Since `re.match` already anchors the match to the beginning of the string, we could just add `$` to the end of our pattern:
+
+
+```python
+for player in ['X', 'O', 'XX', 'OO']:
+    print(player, re.match('[XO]{1}$', player))
+```
+
+    X <_sre.SRE_Match object; span=(0, 1), match='X'>
+    O <_sre.SRE_Match object; span=(0, 1), match='O'>
+    XX None
+    OO None
+
+
+Or use `re.search` with `^$` to indicate a match over the entire string:
+
+
+```python
+for player in ['X', 'O', 'XX', 'OO']:
+    print(player, re.search('^[XO]{1}$', player))
+```
+
+    X <_sre.SRE_Match object; span=(0, 1), match='X'>
+    O <_sre.SRE_Match object; span=(0, 1), match='O'>
+    XX None
+    OO None
+
+
+## Matching SSNs and Dates
 
 What if we wanted to recognize a US SSN (social security number)? 
 We will use `re.compile` to create the regex and use it in a `for` loop:
@@ -185,13 +334,13 @@ SSNs always use a dash (`-`) as a number separator, but dates do not.
 
 ```python
 date_re = re.compile('\d{4}-\d{2}-\d{2}')
-dates = ['1999-01-01', '1999/01/01']
+dates = ['1999-01-02', '1999/01/02']
 for d in dates:
     print('{}: {}'.format(d, date_re.match(d)))
 ```
 
-    1999-01-01: <_sre.SRE_Match object; span=(0, 10), match='1999-01-01'>
-    1999/01/01: None
+    1999-01-02: <_sre.SRE_Match object; span=(0, 10), match='1999-01-02'>
+    1999/01/02: None
 
 
 Just as we created a character class with `[0-9]` to represent all the numbers from 0 to 9, we can create a class to represent the separators "/" and "-" with `[/-]`. As regular expressions get longer, it makes sense to break each unit onto a different line and use Python's literal string expression to join them into a single string. As a bonus, we can comment on each unit of the regex.
@@ -204,13 +353,60 @@ date_re = re.compile('\d{4}'  # year
                      '[/-]'   # separator
                      '\d{2}') # day
 
-dates = ['1999-01-01', '1999/01/01']
+dates = ['1999-01-02', '1999/01/02']
+for d in dates:
+    print('{}: {}'.format(d, date_re.match(d)))
+```
+
+    1999-01-02: <_sre.SRE_Match object; span=(0, 10), match='1999-01-02'>
+    1999/01/02: <_sre.SRE_Match object; span=(0, 10), match='1999/01/02'>
+
+
+You may notice that certain elements are repeated. If we followed DRY (Don't Repeat Yourself), we might want to make variables to hold each piece, but then we could not use the literal string joining trick above. In that case, just go back to using `+` to join strings:
+
+
+```python
+sep = '[/-]'
+four_digits = '\d{4}'
+two_digits = '\d{2}'
+
+date_re = re.compile(four_digits + # year
+                     sep         + # separator
+                     two_digits  + # month
+                     sep         + # separator
+                     two_digits)   # day
+
+dates = ['1999-01-02', '1999/01/02']
+for d in dates:
+    print('{}: {}'.format(d, date_re.match(d)))
+```
+
+    1999-01-02: <_sre.SRE_Match object; span=(0, 10), match='1999-01-02'>
+    1999/01/02: <_sre.SRE_Match object; span=(0, 10), match='1999/01/02'>
+
+
+Dates are not always written YYYY-MM-DD where the month/day are zero-padded left, e.g., "01" instead of "1". How could we handle that? Change our `two_digits` from `\d{2}` (exactly two) to `\d{1,2}` (one or two):
+
+
+```python
+sep = '[/-]'
+four_digits = '\d{4}'
+two_digits = '\d{1,2}'
+
+date_re = re.compile(four_digits + # year
+                     sep         + # separator
+                     two_digits  + # month
+                     sep         + # separator
+                     two_digits)   # day
+
+dates = ['1999-01-01', '1999/01/02', '1999/1/2']
 for d in dates:
     print('{}: {}'.format(d, date_re.match(d)))
 ```
 
     1999-01-01: <_sre.SRE_Match object; span=(0, 10), match='1999-01-01'>
-    1999/01/01: <_sre.SRE_Match object; span=(0, 10), match='1999/01/01'>
+    1999/01/02: <_sre.SRE_Match object; span=(0, 10), match='1999/01/02'>
+    1999/1/2: <_sre.SRE_Match object; span=(0, 8), match='1999/1/2'>
 
 
 If we wanted to extract each part of the date (year, month, day), we can use parentheses `()` around the parts we want to capture into `groups`. The group "0" is the whole string that was match, and they are numbered sequentially after that for each group.
@@ -219,13 +415,13 @@ Can you change the regex to match all three strings?
 
 
 ```python
-date_re = re.compile('(\d{4})'
-                     '[/-]'
-                     '(\d{2})'
-                     '[/-]'
-                     '(\d{2})')
+date_re = re.compile('(\d{4})'    # capture year (group 1)
+                     '[/-]'       # separator
+                     '(\d{1,2})'  # capture month (group 2)
+                     '[/-]'       # separator
+                     '(\d{1,2})') # capture day (group 3)
 
-dates = ['1999-01-01', '1999/01/01', '1999.01.01']
+dates = ['1999-01-02', '1999/1/2', '1999.01.01']
 for d in dates:
     match = date_re.match(d)
     print('{}: {}'.format(d, 'match' if match else 'miss'))
@@ -253,11 +449,11 @@ As we add more groups, it can be confusing to remember them by their positions, 
 ```python
 date_re = re.compile('(?P<year>\d{4})'
                      '[/-]'
-                     '(?P<month>\d{2})'
+                     '(?P<month>\d{1,2})'
                      '[/-]'
-                     '(?P<day>\d{2})')
+                     '(?P<day>\d{1,2})')
 
-dates = ['1999-01-01', '1999/01/01', '1999.01.01']
+dates = ['1999-1-2', '1999/01/02', '1999.01.01']
 
 for d in dates:
     match = date_re.match(d)
@@ -270,15 +466,17 @@ for d in dates:
     print()
 ```
 
-    1999-01-01: match
-    1999-01-01 = year "1999" month "01" day "01"
+    1999-1-2: match
+    1999-1-2 = year "1999" month "1" day "2"
     
-    1999/01/01: match
-    1999/01/01 = year "1999" month "01" day "01"
+    1999/01/02: match
+    1999/01/02 = year "1999" month "01" day "02"
     
     1999.01.01: miss
     
 
+
+## Matching US Phone Numbers
 
 What if we wanted to match a US phone number?
 
@@ -289,8 +487,11 @@ phone_re = re.compile('(\d{3})'  # area code
                       '\d{3}'    # prefix
                       '-'        # dash
                       '\d{4}')   # line number
-phone_re.match('(800) 555-1212')
+print(phone_re.match('(800) 555-1212'))
 ```
+
+    None
+
 
 Why didn't that work?
 
@@ -307,14 +508,10 @@ phone_re = re.compile('\('     # left paren
                       '\d{3}'  # prefix
                       '-'      # dash
                       '\d{4}') # line number
-phone_re.match('(800) 555-1212')
+print(phone_re.match('(800) 555-1212'))
 ```
 
-
-
-
     <_sre.SRE_Match object; span=(0, 14), match='(800) 555-1212'>
-
 
 
 We could also use character classes to make this more readable:
@@ -329,14 +526,10 @@ phone_re = re.compile('[(]'    # left paren
                       '-'      # dash
                       '\d{4}') # line number
 
-phone_re.match('(800) 555-1212')
+print(phone_re.match('(800) 555-1212'))
 ```
 
-
-
-
     <_sre.SRE_Match object; span=(0, 14), match='(800) 555-1212'>
-
 
 
 There is not always a space after the area code, and it may sometimes it may be more than one space (or a tab?). We can use the `\s` to indicate any type of whitespace and `*` to indicate zero or more:
@@ -387,14 +580,14 @@ This has the affect of matching a dash after parens which is generally not a val
 
 
 ```python
-phone_re = re.compile('[(]?'
-                      '\d{3}'
-                      '[)]?'
-                      '[-]?'
-                      '\s*'
-                      '\d{3}'
-                      '-'
-                      '\d{4}')
+phone_re = re.compile('[(]?'   # optional left paren
+                      '\d{3}'  # three digits
+                      '[)]?'   # optional right paren
+                      '[-]?'   # optional dash
+                      '\s*'    # zero or more spaces
+                      '\d{3}'  # three digits
+                      '-'      # dash
+                      '\d{4}') # four digits
 
 phone_re.match('(800)-555-1212')
 ```
@@ -555,13 +748,16 @@ phone_re1 = re.compile('[(]'
                        '\s*(?P<prefix>\d{3})'
                        '[.-]'
                        '(?P<line_num>\d{4})')
+
 phone_re2 = re.compile('(?P<area_code>\d{3})'
                        '[.-]?'
                        '(?P<prefix>\d{3})'
                        '[.-]?'
                        '(?P<line_num>\d{4})')
+
 phones = ['8005551212', '(800)555-1212', '(800) 555-1212', 
           '800-555-1212', '(800)-555-1212', '800.555.1212']
+
 for phone in phones:
     match = phone_re1.match(phone) or phone_re2.match(phone)
     tmpl = '{area_code}-{prefix}-{line_num}'
@@ -579,7 +775,7 @@ for phone in phones:
     800.555.1212	800-555-1212
 
 
-# ENA Metadata
+## ENA Metadata
 
 Let's examine the ENA metadata from the XML parsing example. We see there are many ways that latitude/longitude have been represented:
 
@@ -737,7 +933,7 @@ We really need to match more than once using our pattern matching to extract dat
 
 
 ```python
-re.findall('([+-]?\d+(\.\d+)?)', '(-27.83387, +132.43)')
+re.findall('([+-]?\d+(\.\d+)?)','Lat is "-27.83387" and lon is "+132.43."')
 ```
 
 
@@ -751,7 +947,7 @@ OK, it was a bit unexpected that we have matches for both the whole float and th
 
 
 ```python
-re.findall('([+-]?\d+(?:\.\d+)?)', 'lat_lon: (-27.83387, +132.43)')
+re.findall('([+-]?\d+(?:\.\d+)?)', 'Lat is "-27.83387" and lon is "+132.43."')
 ```
 
 
@@ -760,10 +956,6 @@ re.findall('([+-]?\d+(?:\.\d+)?)', 'lat_lon: (-27.83387, +132.43)')
     ['-27.83387', '+132.43']
 
 
-
-There are many resources you can use to thoroughly learn regular expressions, so I won't try to cover them completely here. I will mostly try to introduce the general idea and show you some useful regexes you could steal.
-
-Here is an example of how you can embed regexes in your Python code. This version can parse all the versions of latitude/longitude shown above. This code uses parens to create capture groups which it then uses `match.group(n)` to extract:
 
 There are many resources you can use to thoroughly learn regular expressions, so I won't try to cover them completely here. I will mostly try to introduce the general idea and show you some useful regexes you could steal.
 
@@ -877,20 +1069,20 @@ for date in ['March 24, 2014',
              'Jul-2009', 
              '5/04/2012']:
     
-    print('{}\t{}'.format(dateparser.parse(date), date))
+    print('{:15}\t{}'.format(date, dateparser.parse(date)))
 ```
 
-    2014-03-24 00:00:00	March 24, 2014
-    2013-08-15 00:00:00	2013-08-15
-    2000-02-01 09:01:00	20100910
-    2012-05-02 00:00:00	02-May-2012
-    2009-07-20 00:00:00	Jul-2009
-    2012-05-04 00:00:00	5/04/2012
+    March 24, 2014 	2014-03-24 00:00:00
+    2013-08-15     	2013-08-15 00:00:00
+    20100910       	2000-02-01 09:01:00
+    02-May-2012    	2012-05-02 00:00:00
+    Jul-2009       	2009-07-26 00:00:00
+    5/04/2012      	2012-05-04 00:00:00
 
 
-You can see it's not perfect, e.g., "Jul-2009" should not resolve to the 23rd of July, but, honestly, what should it be? (Is the 1st any better?!) Still, this saves you writing a lot of code. And, trust me, **THIS IS REAL DATA**! While trying to parse latitude, longitude, collection date, and depth for 35K marine metagenomes from the ENA, I wrote a hundreds of lines of code and dozens of regular expressions!
+You can see it's not perfect, e.g., "20100910" should be "2010-09-10" and "Jul-2009" should not resolve to the 26th of July, but, honestly, what should it be? (Is the 1st any better?!) Still, this saves you writing a lot of code. And, trust me, **THIS IS REAL DATA**! While trying to parse latitude, longitude, collection date, and depth for 35K marine metagenomes from the ENA, I wrote a hundreds of lines of code and dozens of regular expressions!
 
-# Exercises
+## Exercises
 
 Write the regular expressions to parse the year, month, and day from the following date formats found in SRA metadata. When no day is present, e.g., "2/14," use "01" for the day.
 
@@ -898,45 +1090,96 @@ Write the regular expressions to parse the year, month, and day from the followi
 ```python
 d1 = "2012-03-09T08:59"
 print(d1, re.match('', d1))
-
-d2 = "2012-03-09T08:59:03"
-
-d3 = "2017-06-16Z"
-
-d4 = "2015-01"
-
-d5 = "2015-01/2015-02"
-
-d6 = "2015-01-03/2015-02-14" 
-
-d7 = "20100910"
-
-d8 = "12/06"
-
-d9 = "2/14"
-
-d10 = "2/14-12/15"
-
-d11 = "2017-06-16Z"
-
-# "Excel" format! What is that?! Look it up.
-d12 = "34210"
-
-d13 = "Dec-2015"
-
-d14 = "March-2017"
-
-d15 = "May, 2017"
-
-d16 = "March-April 2017"
-
-d17 = "July of 2011"
-
-d18 = "2008 August"
 ```
 
     2012-03-09T08:59 <_sre.SRE_Match object; span=(0, 0), match=''>
 
+
+
+```python
+d2 = "2012-03-09T08:59:03"
+```
+
+
+```python
+d3 = "2017-06-16Z"
+```
+
+
+```python
+d4 = "2015-01"
+```
+
+
+```python
+d5 = "2015-01/2015-02"
+```
+
+
+```python
+d6 = "2015-01-03/2015-02-14" 
+```
+
+
+```python
+d7 = "20100910"
+```
+
+
+```python
+d8 = "12/06"
+```
+
+
+```python
+d9 = "2/14"
+```
+
+
+```python
+d10 = "2/14-12/15"
+```
+
+
+```python
+d11 = "2017-06-16Z"
+```
+
+
+```python
+# "Excel" format! What is that?! Look it up.
+d12 = "34210"
+```
+
+
+```python
+d13 = "Dec-2015"
+```
+
+
+```python
+d14 = "March-2017"
+```
+
+
+```python
+d15 = "May, 2017"
+```
+
+
+```python
+d16 = "March-April 2017"
+```
+
+
+```python
+d17 = "July of 2011"
+```
+
+
+```python
+d18 = "2008 August"
+```
 
 Now combine all your code from the previous cell to normalize all the dates into the same format.
 
@@ -974,3 +1217,8 @@ for date in dates:
     1999-01-01	July of 2011
     1999-01-01	2008 August
 
+
+
+```python
+
+```
