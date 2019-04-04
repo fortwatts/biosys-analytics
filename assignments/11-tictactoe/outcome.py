@@ -2,7 +2,7 @@
 """
 Author : George S. Watts <gwatts@email.arizona.edu>
 Date   : 2019-02-07
-Purpose: tictactoe script using commandline flagged arguments
+Purpose: tictactoe script that determines if a winning state has a winner using winning states
 """
 
 import sys
