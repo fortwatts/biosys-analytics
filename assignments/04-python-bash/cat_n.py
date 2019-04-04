@@ -2,7 +2,7 @@
 """
 Author : gwatts
 Date   : 2019-02-05
-Purpose: Rock the Casbah
+Purpose: pytohn script that mimics cat on command line with numbered line option
 """
 
 import os

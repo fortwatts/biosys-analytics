@@ -2,7 +2,7 @@
 """
 Author : gwatts
 Date   : 2019-03-31
-Purpose: Rock the Casbah
+Purpose: parses various date formats to a standard yyyy-mm-dd
 """
 
 import os

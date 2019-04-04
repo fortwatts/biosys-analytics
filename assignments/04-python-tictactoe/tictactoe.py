@@ -2,7 +2,7 @@
 """
 Author : gwatts@email.arizona.edu
 Date   : 2019-02-07
-Purpose: tictactoe script using commandline gflagged arguments
+Purpose: tictactoe script using commandline flagged arguments
 """
 
 import argparse

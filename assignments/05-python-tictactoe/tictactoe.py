@@ -2,7 +2,7 @@
 """
 Author : George S. Watts <gwatts@email.arizona.edu>
 Date   : 2019-02-07
-Purpose: tictactoe script using commandline flagged arguments
+Purpose: tictactoe script using commandline flagged arguments that takes a state, cell, and player and determines if there's a winner
 """
 
 import argparse
