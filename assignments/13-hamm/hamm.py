@@ -40,42 +40,37 @@ def die(msg='Something bad happened'):
 
 # --------------------------------------------------
 # dist is a function returning an integer and words is a zip of the files split on words.
-def dist(words):
-    k = 0
-    for twople in words:
-        for i, j in twople:
-            if i == j:
-                pass# print('letters match')
-            else:
-                k += 1
-                # print('incremented k')
-    return(k)
+def dist(s1, s2):
+    distance = abs(len(s1) - len(s2))
+    for char1, char2 in zip(s1, s2):
+        if char1 != char2:
+            distance += 1
+    logging.debug('s1 = {}, s2 = {}, d = {}'.format(s1, s2, distance))
+    return distance
 # --------------------------------------------------
 def main():
-
     args = get_args()
     pos_arg = args.positional
-    print('args is: "{}"'.format(args))
-    print('positional arguments are: "{}"'.format(pos_arg))
-
-    prg = sys.argv[0]
-    prg_name, _ = os.path.splitext(os.path.basename(prg))
-    logging.basicConfig(
-        filename=prg_name + '.log',
-        filemode='a',
-        level=logging.DEBUG if args.debug else logging.CRITICAL)
-
     f1, f2 = pos_arg
+
+    logging.basicConfig(
+        filename='.log',
+        filemode='w',
+        level=logging.DEBUG if args.debug else logging.CRITICAL)
+    logging.debug('args is: "{}"'.format(args))
+    # logging.debug('positional arguments are: "{}"'.format(pos_arg))
+    # logging.debug('file1 = {} and file 2 = {}'.format(f1, f2))
+
     if not os.path.isfile(f1):
         die('"{}" is not a file'.format(f1))
     if not os.path.isfile(f2):
         die('"{}" is not a file'.format(f2))
-    fh_1 = open(f1)
-    fh_2 = open(f2)
-    words = list(zip(fh_1.read(), fh_2.read()))
-    # print(words)
-    dist(words)
-    sum(map(dist, words))
+    words_1 = open(f1).read().split()
+    words_2 = open(f2).read().split()
+    total_dist = 0
+    for s1, s2 in zip(words_1, words_2):
+        total_dist += dist(s1, s2)
+    print(total_dist)
 
 # --------------------------------------------------
 if __name__ == '__main__':
