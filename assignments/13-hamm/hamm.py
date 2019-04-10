@@ -2,7 +2,7 @@
 """
 Author : George S. Watts
 Date   : 2019-04-09
-Purpose: Rock the Casbah
+Purpose: Hamming distance calculator for text files
 """
 
 import argparse
@@ -67,6 +67,7 @@ def main():
         die('"{}" is not a file'.format(f2))
     words_1 = open(f1).read().split()
     words_2 = open(f2).read().split()
+    # total_dist = sum(map(dist, zip(words_1, words_2)))
     total_dist = 0
     for s1, s2 in zip(words_1, words_2):
         total_dist += dist(s1, s2)
