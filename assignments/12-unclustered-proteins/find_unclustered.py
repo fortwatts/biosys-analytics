@@ -2,7 +2,7 @@
 """
 Author : gwatts
 Date   : 2019-04-09
-Purpose: Rock the Casbah
+Purpose: output unclustered fasta records given a cdhit cluster file and the original fasta
 """
 
 import argparse
