@@ -17,19 +17,19 @@ from collections import defaultdict
 def get_args():
     """get command-line arguments"""
     parser = argparse.ArgumentParser(
-        description='Argparse Python script',
+        description='Graph through sequences',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
-        'positional', metavar='FILE', help='Fasta file')
+        'positional', metavar='str', help='FASTA file')
 
     parser.add_argument(
         '-k',
         '--overlap',
-        help='k-mer length for determining overlap between sequences',
-        metavar='integer',
+        help='K size of overlap',
+        metavar='int',
         type=int,
-        required = True,
+        required = False,
         default=3)
 
     return parser.parse_args()
@@ -68,8 +68,8 @@ def main():
         print('"{}" is not a file'.format(seqfile))
         sys.exit(1)
 
-    if k < 1:
-        print('"{}" is not a file'.format(seqfile))
+    if overlap < 1:
+        print('-k "{}" must be a positive integer'.format(overlap))
         sys.exit(1)
 
     first_kmer = defaultdict(list)
@@ -87,7 +87,8 @@ def main():
                 # print('first kmer: ', firstkmer, ' = last kmer: ', lastkmer, ' first_ids: ', firstids, ' last_ids: ', lastids, sep='')
                 for f_id in firstids:
                     for l_id in lastids:
-                        print(f_id, l_id)
+                        if l_id != f_id:
+                            print(l_id, f_id)
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
